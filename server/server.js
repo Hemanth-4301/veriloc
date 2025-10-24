@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const { createSuperAdmin } = require('./utils/autoSetup');
 
 // Load environment variables
 dotenv.config({ path: './.env' });
@@ -10,7 +11,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin:["http://localhost:5173","https://veriloc-six.vercel.app"],
+  origin:["http://localhost:3000","https://veriloc-six.vercel.app"],
   credentials:true
 }));
 app.use(express.json());
@@ -39,8 +40,10 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => {
+  .then(async () => {
     console.log("Connected to MongoDB");
+    // Auto-create super admin if not exists
+    await createSuperAdmin();
   })
   .catch((error) => {
     console.error("MongoDB connection error:", error);
