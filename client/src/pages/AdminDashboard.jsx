@@ -395,16 +395,16 @@ const AdminDashboard = () => {
       </div>
 
       {/* Analytics Chart */}
-      <div className="card p-4 sm:p-5 lg:p-6 w-full max-w-full">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
-          <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-gray-900 dark:text-gray-100">
+      <div className="card p-3 sm:p-4 lg:p-6 w-full max-w-full overflow-hidden">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4 mb-3 sm:mb-6">
+          <h3 className="text-sm sm:text-lg lg:text-xl font-semibold text-gray-900 dark:text-gray-100 truncate">
             Occupancy Analytics
           </h3>
-          <div className="flex items-center space-x-2 sm:space-x-3">
+          <div className="flex items-center space-x-1 sm:space-x-3 flex-shrink-0">
             <button
               onClick={fetchAnalyticsData}
               disabled={analyticsLoading}
-              className={`flex items-center space-x-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl transition-all duration-300 transform text-sm sm:text-base ${
+              className={`flex items-center space-x-1 sm:space-x-2 px-2 sm:px-4 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl transition-all duration-300 transform text-xs sm:text-base ${
                 analyticsLoading
                   ? "bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-400 cursor-not-allowed"
                   : "bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600 hover:scale-105 shadow-lg"
@@ -413,14 +413,14 @@ const AdminDashboard = () => {
               <RefreshCw
                 className={`h-3 w-3 sm:h-4 sm:w-4 ${analyticsLoading ? "animate-spin" : ""} flex-shrink-0`}
               />
-              <span className="font-medium hidden sm:inline">
+              <span className="font-medium hidden sm:inline whitespace-nowrap">
                 {analyticsLoading ? "Refreshing..." : "Refresh"}
               </span>
             </button>
           </div>
         </div>
-        <div className="w-full overflow-hidden">
-          <div className="w-full max-w-full">
+        <div className="w-full max-w-full overflow-hidden">
+          <div className="w-full min-w-0">
             <OccupancyGraph data={analyticsData} />
           </div>
         </div>
@@ -452,16 +452,16 @@ const AdminDashboard = () => {
         );
       case "analytics":
         return (
-          <div className="space-y-4 sm:space-y-6 w-full max-w-full">
-            <div className="card p-4 sm:p-6 w-full">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
-                <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100">
+          <div className="space-y-4 sm:space-y-6 w-full max-w-full overflow-hidden">
+            <div className="card p-3 sm:p-4 lg:p-6 w-full max-w-full overflow-hidden">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4 mb-3 sm:mb-6">
+                <h2 className="text-base sm:text-xl font-semibold text-gray-900 dark:text-gray-100 truncate">
                   Advanced Analytics
                 </h2>
                 <button
                   onClick={fetchAnalyticsData}
                   disabled={analyticsLoading}
-                  className={`flex items-center space-x-2 px-3 sm:px-4 py-2 rounded-xl transition-all duration-300 transform text-sm sm:text-base ${
+                  className={`flex items-center space-x-1 sm:space-x-2 px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl transition-all duration-300 transform text-xs sm:text-base flex-shrink-0 ${
                     analyticsLoading
                       ? "bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-400 cursor-not-allowed"
                       : "bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600 hover:scale-105 shadow-lg"
@@ -472,13 +472,13 @@ const AdminDashboard = () => {
                       analyticsLoading ? "animate-spin" : ""
                     } flex-shrink-0`}
                   />
-                  <span className="font-medium">
+                  <span className="font-medium whitespace-nowrap">
                     {analyticsLoading ? "Refreshing..." : "Refresh"}
                   </span>
                 </button>
               </div>
-              <div className="w-full overflow-hidden">
-                <div className="w-full max-w-full">
+              <div className="w-full max-w-full overflow-hidden">
+                <div className="w-full min-w-0">
                   <OccupancyGraph data={analyticsData} />
                 </div>
               </div>

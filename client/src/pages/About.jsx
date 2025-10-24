@@ -57,7 +57,7 @@ const About = () => {
               </span>
             </div>
             
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-gray-900 dark:text-white mb-6 tracking-tight">
+            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-gray-900 dark:text-white mb-6 tracking-tight">
               About <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent">VERILOC</span>
             </h1>
             <p className="text-xl sm:text-2xl text-gray-600 dark:text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed">
@@ -116,8 +116,8 @@ const About = () => {
               </div>
             </div>
             <div className="relative">
-              <div className="absolute -inset-4 bg-gradient-to-r from-blue-200/50 to-purple-200/50 dark:from-blue-600/20 dark:to-purple-600/20 rounded-3xl blur-2xl"></div>
-              <div className="relative bg-gradient-to-br from-blue-600 via-blue-500 to-purple-600 rounded-3xl p-8 text-white shadow-2xl">
+              <div className="absolute -inset-4   rounded-3xl blur-2xl"></div>
+              <div className="relative bg-gray-900 rounded-3xl p-8 text-white shadow-2xl">
                 <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -translate-y-4 translate-x-4"></div>
                 <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full translate-y-8 -translate-x-8"></div>
                 <div className="relative z-10">

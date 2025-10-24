@@ -216,24 +216,24 @@ const Home = () => {
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 lg:gap-8">
           {/* Rooms List */}
           <div className="xl:col-span-2">
-            <div className="bg-light-100 dark:bg-gray-900 border border-light-300 dark:border-gray-700 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300">
-              <div className="flex items-center justify-between mb-8">
+            <div className="bg-light-100 dark:bg-gray-900 border border-light-300 dark:border-gray-700 rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg hover:shadow-xl transition-all duration-300">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-6 sm:mb-8">
                 <div className="flex items-center space-x-3">
-                  <div className="p-3 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl">
-                    <MapPin className="h-6 w-6 text-white" />
+                  <div className="p-2 sm:p-3 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl">
+                    <MapPin className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                   </div>
                   <div>
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                    <h2 className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-gray-100">
                       Room Availability
                     </h2>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                       Real-time room status and information
                     </p>
                   </div>
                 </div>
-                <div className="flex items-center space-x-2 px-3 py-2 bg-green-100 dark:bg-green-900/20 rounded-lg">
+                <div className="flex items-center space-x-2 px-3 py-2 bg-green-100 dark:bg-green-900/20 rounded-lg flex-shrink-0">
                   <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                  <span className="text-sm font-medium text-green-700 dark:text-green-400">
+                  <span className="text-xs sm:text-sm font-medium text-green-700 dark:text-green-400">
                     Live
                   </span>
                 </div>
@@ -243,10 +243,10 @@ const Home = () => {
           </div>
 
           {/* Analytics Sidebar */}
-          <div className="space-y-8">
+          <div className="space-y-6 sm:space-y-8">
             {/* Occupancy Chart */}
-            <div className="bg-light-100 dark:bg-gray-900 border border-light-300 dark:border-gray-700 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300">
-              <div className="flex items-center justify-between mb-8">
+            <div className="bg-light-100 dark:bg-gray-900 border border-light-300 dark:border-gray-700 rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg hover:shadow-xl transition-all duration-300 w-full max-w-full overflow-hidden">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-6 sm:mb-8">
                 <div className="flex items-center space-x-3">
                   <div className="p-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl">
                     <Calendar className="h-6 w-6 text-white" />
@@ -272,7 +272,7 @@ const Home = () => {
             </div>
 
             {/* Quick Info */}
-            <div className="bg-light-100 dark:bg-gray-900 border border-light-300 dark:border-gray-700 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300">
+            <div className="bg-light-100 dark:bg-gray-900 border border-light-300 dark:border-gray-700 rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg hover:shadow-xl transition-all duration-300">
               <div className="flex items-center space-x-3 mb-6">
                 <div className="p-3 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl">
                   <Clock className="h-6 w-6 text-white" />

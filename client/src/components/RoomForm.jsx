@@ -284,22 +284,22 @@ const RoomForm = ({ onRoomCreated }) => {
 
   if (!showForm) {
     return (
-      <div className="card p-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+      <div className="card p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
+          <div className="min-w-0">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100">
               Room Management
             </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
               Add new rooms to the system
             </p>
           </div>
           <button
             onClick={() => setShowForm(true)}
-            className="btn-primary flex items-center space-x-2"
+            className="btn-primary flex items-center justify-center space-x-2 flex-shrink-0"
           >
-            <Plus className="h-5 w-5" />
-            <span>Add Room</span>
+            <Plus className="h-4 w-4 sm:h-5 sm:w-5" />
+            <span className="text-sm sm:text-base">Add Room</span>
           </button>
         </div>
       </div>
@@ -307,38 +307,38 @@ const RoomForm = ({ onRoomCreated }) => {
   }
 
   return (
-    <div className="card p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+    <div className="card p-4 sm:p-6">
+      <div className="flex items-center justify-between mb-4 sm:mb-6">
+        <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100">
           Add New Room
         </h3>
         <button
           onClick={handleCancel}
-          className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+          className="p-1.5 sm:p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
         >
-          <X className="h-5 w-5 text-gray-500" />
+          <X className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500" />
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
         {/* Create Multiple Toggle */}
-        <div className="flex items-center space-x-3 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+        <div className="flex items-start sm:items-center space-x-3 p-3 sm:p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
           <input
             type="checkbox"
             id="createMultiple"
             checked={createMultiple}
             onChange={(e) => setCreateMultiple(e.target.checked)}
-            className="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500"
+            className="mt-0.5 sm:mt-0 rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 flex-shrink-0"
           />
           <label
             htmlFor="createMultiple"
-            className="text-sm font-medium text-blue-800 dark:text-blue-200"
+            className="text-xs sm:text-sm font-medium text-blue-800 dark:text-blue-200 leading-relaxed"
           >
             Create multiple time slots for this room
           </label>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Room Number *
@@ -359,7 +359,7 @@ const RoomForm = ({ onRoomCreated }) => {
               Day *
             </label>
             {createMultiple ? (
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
                 {[
                   "Monday",
                   "Tuesday",
@@ -371,7 +371,7 @@ const RoomForm = ({ onRoomCreated }) => {
                 ].map((day) => (
                   <label
                     key={day}
-                    className={`flex items-center space-x-2 p-2 rounded-lg border cursor-pointer transition-colors ${
+                    className={`flex items-center space-x-2 p-2 sm:p-3 rounded-lg border cursor-pointer transition-colors text-sm ${
                       selectedDays.includes(day)
                         ? "bg-blue-100 dark:bg-blue-900 border-blue-300 dark:border-blue-700"
                         : "bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600"
@@ -381,10 +381,11 @@ const RoomForm = ({ onRoomCreated }) => {
                       type="checkbox"
                       checked={selectedDays.includes(day)}
                       onChange={() => toggleDay(day)}
-                      className="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500"
+                      className="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 flex-shrink-0"
                     />
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                      {day.slice(0, 3)}
+                    <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 truncate">
+                      <span className="sm:hidden">{day.slice(0, 3)}</span>
+                      <span className="hidden sm:inline">{day}</span>
                     </span>
                   </label>
                 ))}
@@ -488,17 +489,17 @@ const RoomForm = ({ onRoomCreated }) => {
 
         {/* Multiple Room Creation UI */}
         {createMultiple && (
-          <div className="space-y-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-            <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+          <div className="space-y-4 sm:space-y-6 p-3 sm:p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+            <h4 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100">
               Create Multiple Time Slots
             </h4>
 
             {/* Days Selection */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 sm:mb-3">
                 Select Days *
               </label>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
                 {[
                   "Monday",
                   "Tuesday",
@@ -603,28 +604,28 @@ const RoomForm = ({ onRoomCreated }) => {
 
         {/* Admin selection removed per requirements */}
 
-        <div className="flex space-x-4">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
           <button
             type="submit"
             disabled={loading}
-            className="btn-primary flex-1 flex items-center justify-center"
+            className="btn-primary flex-1 flex items-center justify-center py-2.5 sm:py-3"
           >
             {loading ? (
-              <Loader2 className="h-5 w-5 animate-spin" />
+              <Loader2 className="h-4 w-4 sm:h-5 sm:w-5 animate-spin" />
             ) : (
               <>
-                <Check className="h-5 w-5 mr-2" />
-                Create Room
+                <Check className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
+                <span className="text-sm sm:text-base">Create Room</span>
               </>
             )}
           </button>
           <button
             type="button"
             onClick={handleCancel}
-            className="btn-secondary flex-1 flex items-center justify-center"
+            className="btn-secondary flex-1 flex items-center justify-center py-2.5 sm:py-3"
           >
-            <X className="h-5 w-5 mr-2" />
-            Cancel
+            <X className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
+            <span className="text-sm sm:text-base">Cancel</span>
           </button>
         </div>
       </form>

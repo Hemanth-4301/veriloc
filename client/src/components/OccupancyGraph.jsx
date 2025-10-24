@@ -83,9 +83,9 @@ const OccupancyGraph = ({ data = [], onDownload, onFilter }) => {
         position: "top",
         labels: {
           usePointStyle: true,
-          padding: 20,
+          padding: window.innerWidth < 640 ? 10 : 20,
           font: {
-            size: 14,
+            size: window.innerWidth < 640 ? 10 : 14,
             weight: "500",
           },
         },
@@ -125,10 +125,12 @@ const OccupancyGraph = ({ data = [], onDownload, onFilter }) => {
         },
         ticks: {
           font: {
-            size: 12,
+            size: window.innerWidth < 640 ? 9 : 12,
             weight: "500",
           },
           color: "#6B7280",
+          maxRotation: window.innerWidth < 640 ? 45 : 0,
+          minRotation: 0,
         },
       },
       y: {
@@ -139,7 +141,7 @@ const OccupancyGraph = ({ data = [], onDownload, onFilter }) => {
         },
         ticks: {
           font: {
-            size: 12,
+            size: window.innerWidth < 640 ? 9 : 12,
             weight: "500",
           },
           color: "#6B7280",
@@ -153,6 +155,14 @@ const OccupancyGraph = ({ data = [], onDownload, onFilter }) => {
     animation: {
       duration: 1000,
       easing: "easeInOutQuart",
+    },
+    layout: {
+      padding: {
+        left: window.innerWidth < 640 ? 5 : 10,
+        right: window.innerWidth < 640 ? 5 : 10,
+        top: window.innerWidth < 640 ? 5 : 10,
+        bottom: window.innerWidth < 640 ? 5 : 10,
+      },
     },
   };
 
@@ -191,36 +201,38 @@ const OccupancyGraph = ({ data = [], onDownload, onFilter }) => {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="w-full max-w-full space-y-3 sm:space-y-4">
       {/* Chart Controls */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-4">
         <div className="flex items-center space-x-2">
-          <Filter className="h-4 w-4 text-gray-500" />
-          <span className="text-sm text-gray-600 dark:text-gray-400">Chart Controls</span>
+          <Filter className="h-4 w-4 text-gray-500 flex-shrink-0" />
+          <span className="text-sm text-gray-600 dark:text-gray-400 truncate">Chart Controls</span>
         </div>
-        <div className="flex space-x-2">
+        <div className="flex flex-wrap gap-2 sm:space-x-2">
           {onFilter && (
             <button
               onClick={onFilter}
-              className="flex items-center space-x-1 px-3 py-1.5 text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+              className="flex items-center space-x-1 px-2 sm:px-3 py-1.5 text-xs sm:text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors whitespace-nowrap"
             >
-              <Filter className="h-4 w-4" />
-              <span>Filter</span>
+              <Filter className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+              <span className="hidden sm:inline">Filter</span>
             </button>
           )}
           <button
             onClick={handleDownload}
-            className="flex items-center space-x-1 px-3 py-1.5 text-sm bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-900/30 transition-colors"
+            className="flex items-center space-x-1 px-2 sm:px-3 py-1.5 text-xs sm:text-sm bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-900/30 transition-colors whitespace-nowrap"
           >
-            <Download className="h-4 w-4" />
-            <span>Download</span>
+            <Download className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+            <span className="hidden sm:inline">Download</span>
           </button>
         </div>
       </div>
       
-      {/* Chart */}
-      <div className="h-64">
-        <Bar ref={chartRef} data={chartData} options={options} />
+      {/* Chart Container - Fixed width containment */}
+      <div className="w-full max-w-full overflow-hidden">
+        <div className="h-48 sm:h-56 md:h-64 w-full min-w-0">
+          <Bar ref={chartRef} data={chartData} options={options} />
+        </div>
       </div>
     </div>
   );

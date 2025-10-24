@@ -73,17 +73,6 @@ const Footer = () => {
               <p className="text-gray-400 text-sm">
                 © 2024 VERILOC. All rights reserved.
               </p>
-              <div className="flex space-x-6">
-                {footerLinks.legal.map((link, index) => (
-                  <a
-                    key={index}
-                    href={link.href}
-                    className=" hover:text-gray-900 text-gray-400 dark:hover:text-white text-sm transition-colors"
-                  >
-                    {link.name}
-                  </a>
-                ))}
-              </div>
             </div>
 
             <div className="flex items-center space-x-6">
@@ -98,13 +87,6 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-800 text-center">
-            <p className="text-gray-600 dark:text-gray-400 text-sm flex items-center justify-center space-x-1">
-              <span>Made with</span>
-              <Heart className="w-4 h-4 text-red-500" />
-              <span>for education</span>
-            </p>
-          </div>
         </div>
       </div>
     </footer>

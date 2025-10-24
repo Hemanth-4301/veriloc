@@ -197,22 +197,22 @@ const RoomList = ({ rooms = [], showActions = false, onRoomUpdate }) => {
       </div>
 
       {/* Rooms Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
         {paginatedRooms.map((room, index) => (
           <div
             key={`${room._id}-${index}`}
-            className="card p-6 hover:shadow-lg transition-all duration-300"
+            className="card p-4 sm:p-6 hover:shadow-lg transition-all duration-300"
           >
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex items-center space-x-2">
-                <MapPin className="h-5 w-5 text-gray-600 dark:text-gray-400" />
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+            <div className="flex items-start justify-between mb-3 sm:mb-4">
+              <div className="flex items-center space-x-2 min-w-0 flex-1">
+                <MapPin className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600 dark:text-gray-400 flex-shrink-0" />
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100 truncate">
                   {room.roomNumber}
                 </h3>
               </div>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
                 <span
-                  className={`badge ${
+                  className={`badge text-xs ${
                     room.status === "Vacant" ? "badge-success" : "badge-danger"
                   }`}
                 >
@@ -222,22 +222,22 @@ const RoomList = ({ rooms = [], showActions = false, onRoomUpdate }) => {
                   <div className="flex items-center space-x-1">
                     <button
                       onClick={() => handleEdit(room)}
-                      className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
+                      className="p-1.5 sm:p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
                       disabled={
                         loading || (editingId && editingId !== room._id)
                       }
                     >
                       {loading && editingId === room._id ? (
-                        <Loader2 className="h-4 w-4 text-gray-600 dark:text-gray-400 animate-spin" />
+                        <Loader2 className="h-3 w-3 sm:h-4 sm:w-4 text-gray-600 dark:text-gray-400 animate-spin" />
                       ) : (
-                        <Edit className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+                        <Edit className="h-3 w-3 sm:h-4 sm:w-4 text-gray-600 dark:text-gray-400" />
                       )}
                     </button>
                     <button
                       onClick={() => handleDelete(room._id)}
-                      className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
+                      className="p-1.5 sm:p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
                     >
-                      <Trash2 className="h-4 w-4 text-red-600 dark:text-red-400" />
+                      <Trash2 className="h-3 w-3 sm:h-4 sm:w-4 text-red-600 dark:text-red-400" />
                     </button>
                   </div>
                 )}
@@ -366,28 +366,39 @@ const RoomList = ({ rooms = [], showActions = false, onRoomUpdate }) => {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex flex-col sm:flex-row items-center justify-between mt-8 space-y-4 sm:space-y-0">
-          <div className="text-sm text-gray-600 dark:text-gray-400">
+        <div className="flex flex-col sm:flex-row items-center justify-between mt-6 sm:mt-8 space-y-3 sm:space-y-0">
+          <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 text-center sm:text-left">
             Showing {startIndex + 1} to{" "}
             {Math.min(endIndex, filteredRooms.length)} of {filteredRooms.length}{" "}
             rooms
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-1 sm:space-x-2">
             <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
-              className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700"
+              className="px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700"
             >
-              Previous
+              <span className="hidden sm:inline">Previous</span>
+              <span className="sm:hidden">Prev</span>
             </button>
 
-            <div className="flex space-x-1">
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                (page) => (
+            <div className="flex space-x-1 max-w-[200px] overflow-x-auto scrollbar-hide">
+              {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+                let page;
+                if (totalPages <= 5) {
+                  page = i + 1;
+                } else if (currentPage <= 3) {
+                  page = i + 1;
+                } else if (currentPage >= totalPages - 2) {
+                  page = totalPages - 4 + i;
+                } else {
+                  page = currentPage - 2 + i;
+                }
+                return (
                   <button
                     key={page}
                     onClick={() => handlePageChange(page)}
-                    className={`px-3 py-2 text-sm font-medium rounded-lg ${
+                    className={`px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium rounded-lg flex-shrink-0 ${
                       currentPage === page
                         ? "bg-blue-600 text-white"
                         : "text-gray-500 bg-white border border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700"
@@ -395,16 +406,17 @@ const RoomList = ({ rooms = [], showActions = false, onRoomUpdate }) => {
                   >
                     {page}
                   </button>
-                )
-              )}
+                );
+              })}
             </div>
 
             <button
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
-              className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700"
+              className="px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700"
             >
-              Next
+              <span className="hidden sm:inline">Next</span>
+              <span className="sm:hidden">Next</span>
             </button>
           </div>
         </div>
