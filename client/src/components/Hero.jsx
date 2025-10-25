@@ -82,16 +82,27 @@ const Hero = () => {
   };
 
   return (
-    <div className="relative w-full min-h-screen bg-white dark:bg-black overflow-hidden">
+    <div className="relative w-full min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 dark:from-gray-900 dark:via-blue-950/20 dark:to-gray-900 overflow-hidden">
       {/* Background Elements */}
-      <div className="absolute inset-0 opacity-5 dark:opacity-10">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `radial-gradient(circle at 25px 25px, rgba(0,0,0,0.1) 2%, transparent 0%), radial-gradient(circle at 75px 75px, rgba(0,0,0,0.1) 2%, transparent 0%)`,
-            backgroundSize: "100px 100px",
-          }}
-        />
+      <div className="absolute inset-0">
+        {/* Blue gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-100/40 via-transparent to-blue-200/30 dark:from-blue-900/20 dark:via-transparent dark:to-blue-800/10"></div>
+        
+        {/* Animated blue orbs */}
+        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/8 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-blue-300/5 rounded-full blur-3xl"></div>
+        
+        {/* Dot pattern */}
+        <div className="absolute inset-0 opacity-5 dark:opacity-10">
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `radial-gradient(circle at 25px 25px, rgba(0,0,0,0.1) 2%, transparent 0%), radial-gradient(circle at 75px 75px, rgba(0,0,0,0.1) 2%, transparent 0%)`,
+              backgroundSize: "100px 100px",
+            }}
+          />
+        </div>
       </div>
 
       <style dangerouslySetInnerHTML={{ __html: `
@@ -155,7 +166,7 @@ const Hero = () => {
               variants={fadeInUpVariants}
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-black/10 dark:bg-white/10 border border-black/20 dark:border-white/20 backdrop-blur-sm mb-8 lg:mb-12"
             >
-              <div className="w-2 h-2 bg-black/60 dark:bg-white/60 rounded-full animate-pulse" />
+              <div className="w-2 h-2 bg-black/60 dark:bg-white/60 rounded-full" />
               <span className="text-sm font-medium text-black dark:text-white">
                 Intelligent Campus Management
               </span>
@@ -228,7 +239,7 @@ const Hero = () => {
               className="inline-flex items-center gap-4 px-6 py-3 rounded-full bg-black/10 dark:bg-white/10 border border-black/20 dark:border-white/20 backdrop-blur-sm shadow-sm"
             >
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-black/60 dark:bg-white/60 rounded-full animate-pulse" />
+                <div className="w-2 h-2 bg-black/60 dark:bg-white/60 rounded-full" />
                 <span className="text-sm font-medium text-black dark:text-white">
                   System Status: Operational
                 </span>
@@ -255,7 +266,7 @@ const Hero = () => {
               <motion.div
                 className="relative bg-black/5 dark:bg-white/5 backdrop-blur-3xl rounded-3xl border border-black/10 dark:border-white/10 overflow-hidden transform-gpu glowing-border"
                 style={{
-                  animation: 'glowing-border 4s ease-in-out infinite',
+                  animation: 'glowing-border 4s ease-in-out',
                 }}
                 variants={itemVariants}
                 whileHover={{ scale: 1.01 }}
@@ -277,7 +288,7 @@ const Hero = () => {
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 bg-black/60 dark:bg-white/60 rounded-full animate-pulse" />
+                      <div className="w-3 h-3 bg-black/60 dark:bg-white/60 rounded-full" />
                       <span className="text-black/80 dark:text-white/80 text-sm font-medium">
                         Active
                       </span>
@@ -388,14 +399,12 @@ const Hero = () => {
                       </div>
                     </div>
                     <div className="flex gap-1">
-                      <div className="w-2 h-2 bg-black/60 dark:bg-white/60 rounded-full animate-pulse" />
+                      <div className="w-2 h-2 bg-black/60 dark:bg-white/60 rounded-full" />
                       <div
-                        className="w-2 h-2 bg-black/60 dark:bg-white/60 rounded-full animate-pulse"
-                        style={{ animationDelay: "0.2s" }}
+                        className="w-2 h-2 bg-black/60 dark:bg-white/60 rounded-full"
                       />
                       <div
-                        className="w-2 h-2 bg-black/60 dark:bg-white/60 rounded-full animate-pulse"
-                        style={{ animationDelay: "0.4s" }}
+                        className="w-2 h-2 bg-black/60 dark:bg-white/60 rounded-full"
                       />
                     </div>
                   </div>
@@ -413,7 +422,7 @@ const Hero = () => {
                 }}
                 transition={{
                   duration: 8,
-                  repeat: Infinity,
+                  repeat: 0,
                   ease: "linear",
                 }}
               />
@@ -427,7 +436,7 @@ const Hero = () => {
                 }}
                 transition={{
                   duration: 6,
-                  repeat: Infinity,
+                  repeat: 0,
                   ease: "linear",
                 }}
               />
@@ -439,7 +448,7 @@ const Hero = () => {
                 }}
                 transition={{
                   duration: 7,
-                  repeat: Infinity,
+                  repeat: 0,
                   ease: "easeInOut",
                 }}
               />
@@ -451,7 +460,7 @@ const Hero = () => {
                 }}
                 transition={{
                   duration: 9,
-                  repeat: Infinity,
+                  repeat: 0,
                   ease: "easeInOut",
                 }}
               />

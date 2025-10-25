@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useAuth } from "../contexts/AuthContext.jsx";
 import {
   Users,
@@ -43,6 +43,7 @@ const AdminDashboard = () => {
     totalAdmins: 0,
   });
   const [recentActivity, setRecentActivity] = useState([]);
+  const [recentActivityLoading, setRecentActivityLoading] = useState(true);
   const [rooms, setRooms] = useState([]);
   const [roomsLoading, setRoomsLoading] = useState(false);
   const [analyticsData, setAnalyticsData] = useState([]);
@@ -61,7 +62,7 @@ const AdminDashboard = () => {
     fetchAnalyticsData();
   }, []);
 
-  const fetchAnalyticsData = async () => {
+  const fetchAnalyticsData = useCallback(async () => {
     try {
       setAnalyticsLoading(true);
       const response = await api.get("/rooms/analytics");
@@ -72,10 +73,11 @@ const AdminDashboard = () => {
     } finally {
       setAnalyticsLoading(false);
     }
-  };
+  }, []);
 
   const fetchRecentActivity = async () => {
     try {
+      setRecentActivityLoading(true);
       const response = await api.get("/admin/activity");
       const activities = response.data.activities.map((activity) => ({
         id: activity._id,
@@ -89,6 +91,8 @@ const AdminDashboard = () => {
       console.error("Error fetching recent activity:", error);
       // Fallback to empty array if API fails
       setRecentActivity([]);
+    } finally {
+      setRecentActivityLoading(false);
     }
   };
 
@@ -126,7 +130,7 @@ const AdminDashboard = () => {
     }
   };
 
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = useCallback(async () => {
     const results = await Promise.allSettled([
           api.get("/rooms"),
           api.get("/auth/admins"),
@@ -180,9 +184,9 @@ const AdminDashboard = () => {
 
     // Recent Activity
       await fetchRecentActivity();
-  };
+  }, []);
 
-  const handleRoomUpdate = async () => {
+  const handleRoomUpdate = useCallback(async () => {
     setRoomsLoading(true);
     try {
       const response = await api.get("/rooms");
@@ -194,7 +198,7 @@ const AdminDashboard = () => {
     } finally {
       setRoomsLoading(false);
     }
-  };
+  }, [fetchDashboardData]);
 
   const renderOverview = () => (
     <div className="space-y-4 sm:space-y-6 lg:space-y-8">
@@ -361,27 +365,72 @@ const AdminDashboard = () => {
               Recent Activity
             </h3>
             <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span className="text-xs text-green-600 dark:text-green-400 font-medium">Live</span>
+              <div className={`w-2 h-2 rounded-full animate-pulse ${recentActivityLoading ? 'bg-blue-500' : 'bg-green-500'}`}></div>
+              <span className={`text-xs font-medium ${recentActivityLoading ? 'text-blue-600 dark:text-blue-400' : 'text-green-600 dark:text-green-400'}`}>
+                {recentActivityLoading ? 'Loading' : 'Live'}
+              </span>
             </div>
           </div>
           <div className="h-72 overflow-y-auto smooth-scroll space-y-3">
-            {recentActivity.map((activity) => (
-              <div key={activity.id} className="flex items-start space-x-3 p-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-xl transition-all duration-200 hover:shadow-sm">
-                <div className="p-2 bg-indigo-50 dark:bg-gray-700 rounded-lg border border-indigo-100 dark:border-gray-600 flex-shrink-0">
-                  <activity.icon className="h-4 w-4 text-indigo-600 dark:text-gray-300" />
+            {recentActivityLoading ? (
+              // Enhanced Loading state
+              <div className="flex flex-col items-center justify-center h-full text-center py-8">
+                <div className="relative mb-6">
+                  {/* Outer rotating ring */}
+                  <div className="w-20 h-20 border-4 border-blue-200 dark:border-blue-800 rounded-full animate-spin">
+                    <div className="absolute top-0 left-0 w-20 h-20 border-4 border-transparent border-t-blue-500 dark:border-t-blue-400 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
+                  </div>
+                  
+                  {/* Inner pulsing dot */}
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-blue-500 dark:bg-blue-400 rounded-full animate-ping"></div>
+                  
+                  {/* Center icon */}
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6 h-6 bg-white dark:bg-gray-900 rounded-full flex items-center justify-center shadow-lg">
+                    <Activity className="h-3 w-3 text-blue-500 dark:text-blue-400" />
+                  </div>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm text-gray-900 dark:text-gray-100 line-clamp-2 font-medium">
-                    {activity.message}
+                
+                {/* Loading text with animation */}
+                <div className="space-y-2">
+                  <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                    Loading Activities
                   </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    {activity.time}
+                  <div className="flex items-center justify-center space-x-1">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                  </div>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Fetching recent system activity
                   </p>
+                </div>
+                
+                {/* Progress bar */}
+                <div className="w-48 mt-4">
+                  <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+                    <div className="bg-gradient-to-r from-blue-500 to-purple-600 h-1.5 rounded-full animate-pulse" style={{ width: '60%' }}></div>
+                  </div>
                 </div>
               </div>
-            ))}
-            {recentActivity.length === 0 && (
+            ) : recentActivity.length > 0 ? (
+              // Show activities
+              recentActivity.map((activity) => (
+                <div key={activity.id} className="flex items-start space-x-3 p-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-xl transition-all duration-200 hover:shadow-sm">
+                  <div className="p-2 bg-indigo-50 dark:bg-gray-700 rounded-lg border border-indigo-100 dark:border-gray-600 flex-shrink-0">
+                    <activity.icon className="h-4 w-4 text-indigo-600 dark:text-gray-300" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm text-gray-900 dark:text-gray-100 line-clamp-2 font-medium">
+                      {activity.message}
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      {activity.time}
+                    </p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              // No activity state
               <div className="flex flex-col items-center justify-center h-full text-center py-8">
                 <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-4">
                   <Activity className="h-8 w-8 text-gray-400" />
@@ -452,7 +501,7 @@ const AdminDashboard = () => {
         );
       case "analytics":
         return (
-          <div className="space-y-4 sm:space-y-6 w-full max-w-full overflow-hidden">
+          <div className="w-full max-w-full overflow-hidden">
             <div className="card p-3 sm:p-4 lg:p-6 w-full max-w-full overflow-hidden">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4 mb-3 sm:mb-6">
                 <h2 className="text-base sm:text-xl font-semibold text-gray-900 dark:text-gray-100 truncate">
@@ -461,7 +510,7 @@ const AdminDashboard = () => {
                 <button
                   onClick={fetchAnalyticsData}
                   disabled={analyticsLoading}
-                  className={`flex items-center space-x-1 sm:space-x-2 px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl transition-all duration-300 transform text-xs sm:text-base flex-shrink-0 ${
+                  className={`flex items-center space-x-1 sm:space-x-2 px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl transition-all duration-300 transform text-xs sm:text-base flex-shrink-0 w-full sm:w-auto ${
                     analyticsLoading
                       ? "bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-400 cursor-not-allowed"
                       : "bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600 hover:scale-105 shadow-lg"
@@ -478,7 +527,7 @@ const AdminDashboard = () => {
                 </button>
               </div>
               <div className="w-full max-w-full overflow-hidden">
-                <div className="w-full min-w-0">
+                <div className="w-full min-w-0 overflow-hidden">
                   <OccupancyGraph data={analyticsData} />
                 </div>
               </div>
@@ -722,13 +771,31 @@ const AdminDashboard = () => {
           </div>
 
           {/* Content */}
-          <div className="px-3 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8">
-            <div className="max-w-7xl mx-auto">
+          <div className="px-3 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8 max-w-full overflow-hidden">
+            <div className="max-w-7xl mx-auto w-full">
               {renderContent()}
             </div>
           </div>
         </div>
       </div>
+
+      {/* Global CSS for Chart.js containment */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        /* Ensure Chart.js canvas doesn't cause horizontal scrolling */
+        .chartjs-render-monitor,
+        canvas {
+          max-width: 100% !important;
+          width: 100% !important;
+          height: auto !important;
+        }
+        
+        /* Prevent any chart-related overflow */
+        [role="img"],
+        .chartjs-wrapper {
+          overflow: hidden !important;
+          max-width: 100% !important;
+        }
+      ` }} />
     </div>
   );
 };

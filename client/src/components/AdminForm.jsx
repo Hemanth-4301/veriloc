@@ -189,4 +189,4 @@ const AdminForm = ({ onAdminCreated }) => {
   );
 };
 
-export default AdminForm;
+export default React.memo(AdminForm);

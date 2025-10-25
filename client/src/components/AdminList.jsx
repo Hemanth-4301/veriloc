@@ -396,4 +396,4 @@ const AdminList = ({ refreshSignal }) => {
   );
 };
 
-export default AdminList;
+export default React.memo(AdminList);

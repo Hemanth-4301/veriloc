@@ -425,4 +425,4 @@ const RoomList = ({ rooms = [], showActions = false, onRoomUpdate }) => {
   );
 };
 
-export default RoomList;
+export default React.memo(RoomList);

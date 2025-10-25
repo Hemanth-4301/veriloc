@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from "react";
 import api from "../services/api";
 import toast from "react-hot-toast";
 
@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
     initAuth();
   }, [token]);
 
-  const login = async (username, password) => {
+  const login = useCallback(async (username, password) => {
     try {
       const response = await api.post("/auth/login", { username, password });
       const { token: newToken, admin: adminData } = response.data;
@@ -51,16 +51,16 @@ export const AuthProvider = ({ children }) => {
       toast.error(message);
       return { success: false, error: message };
     }
-  };
+  }, []);
 
-  const logout = () => {
+  const logout = useCallback(() => {
     localStorage.removeItem("token");
     setToken(null);
     setAdmin(null);
     toast.success("Logged out successfully");
-  };
+  }, []);
 
-  const register = async (adminData) => {
+  const register = useCallback(async (adminData) => {
     try {
       const response = await api.post("/auth/register", adminData);
       toast.success("Admin created successfully!");
@@ -70,9 +70,9 @@ export const AuthProvider = ({ children }) => {
       toast.error(message);
       return { success: false, error: message };
     }
-  };
+  }, []);
 
-  const updateAdmin = async (adminId, updateData) => {
+  const updateAdmin = useCallback(async (adminId, updateData) => {
     try {
       const response = await api.put(`/auth/admins/${adminId}`, updateData);
       toast.success("Admin updated successfully!");
@@ -82,9 +82,9 @@ export const AuthProvider = ({ children }) => {
       toast.error(message);
       return { success: false, error: message };
     }
-  };
+  }, []);
 
-  const deleteAdmin = async (adminId) => {
+  const deleteAdmin = useCallback(async (adminId) => {
     try {
       await api.delete(`/auth/admins/${adminId}`);
       toast.success("Admin deleted successfully!");
@@ -94,9 +94,9 @@ export const AuthProvider = ({ children }) => {
       toast.error(message);
       return { success: false, error: message };
     }
-  };
+  }, []);
 
-  const getAdmins = async () => {
+  const getAdmins = useCallback(async () => {
     try {
       const response = await api.get("/auth/admins");
       return { success: true, data: response.data };
@@ -105,9 +105,9 @@ export const AuthProvider = ({ children }) => {
       toast.error(message);
       return { success: false, error: message };
     }
-  };
+  }, []);
 
-  const value = {
+  const value = useMemo(() => ({
     admin,
     loading,
     isAuthenticated: !!admin,
@@ -118,7 +118,7 @@ export const AuthProvider = ({ children }) => {
     updateAdmin,
     deleteAdmin,
     getAdmins,
-  };
+  }), [admin, loading, login, logout, register, updateAdmin, deleteAdmin, getAdmins]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

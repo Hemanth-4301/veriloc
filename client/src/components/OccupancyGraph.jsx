@@ -235,34 +235,52 @@ const OccupancyGraph = ({ data = [], onDownload, onFilter }) => {
       {/* Chart Container - Fixed width containment */}
       <div className="w-full max-w-full overflow-hidden">
         <div
-          className="relative h-48 sm:h-56 md:h-64 w-full min-w-0"
+          className="relative h-48 sm:h-56 md:h-64 w-full min-w-0 overflow-hidden"
           style={{ touchAction: "pan-y pinch-zoom" }}
         >
-          <Bar
-            ref={chartRef}
-            data={chartData}
-            options={{
-              ...options,
-              maintainAspectRatio: false,
-              responsive: true,
-              scales: {
-                ...options.scales,
-                x: {
-                  ...options.scales.x,
-                  ticks: {
-                    ...options.scales.x.ticks,
-                    maxRotation: window.innerWidth < 640 ? 45 : 0,
-                    autoSkip: true,
-                    maxTicksLimit: window.innerWidth < 640 ? 5 : 7,
+          <div className="w-full h-full overflow-hidden">
+            <Bar
+              ref={chartRef}
+              data={chartData}
+              options={{
+                ...options,
+                maintainAspectRatio: false,
+                responsive: true,
+                plugins: {
+                  ...options.plugins,
+                  legend: {
+                    ...options.plugins.legend,
+                    position: window.innerWidth < 640 ? 'bottom' : 'top',
+                    labels: {
+                      ...options.plugins.legend.labels,
+                      boxWidth: window.innerWidth < 640 ? 8 : 12,
+                      padding: window.innerWidth < 640 ? 10 : 20,
+                      font: {
+                        size: window.innerWidth < 640 ? 10 : 14,
+                        weight: "500",
+                      },
+                    },
                   },
                 },
-              },
-            }}
-          />
+                scales: {
+                  ...options.scales,
+                  x: {
+                    ...options.scales.x,
+                    ticks: {
+                      ...options.scales.x.ticks,
+                      maxRotation: window.innerWidth < 640 ? 45 : 0,
+                      autoSkip: true,
+                      maxTicksLimit: window.innerWidth < 640 ? 5 : 7,
+                    },
+                  },
+                },
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default OccupancyGraph;
+export default React.memo(OccupancyGraph);

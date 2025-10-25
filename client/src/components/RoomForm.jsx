@@ -633,4 +633,4 @@ const RoomForm = ({ onRoomCreated }) => {
   );
 };
 
-export default RoomForm;
+export default React.memo(RoomForm);

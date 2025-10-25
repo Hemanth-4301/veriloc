@@ -18,4 +18,4 @@ const LoadingSpinner = ({ size = "default", text = "Loading..." }) => {
   );
 };
 
-export default LoadingSpinner;
+export default React.memo(LoadingSpinner);
