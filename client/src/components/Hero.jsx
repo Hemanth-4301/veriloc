@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import LoadingSpinner from "./LoadingSpinner.jsx";
 import {
   BookOpen,
   ArrowRight,
@@ -17,15 +18,32 @@ import {
 } from "lucide-react";
 
 const Hero = () => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [stats, setStats] = useState({ total: 0, available: 0, occupied: 0 });
+  const [statsLoading, setStatsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
+    const fetchRoomStats = async () => {
+      try {
+        const response = await fetch(
+          "https://veriloc-api.onrender.com/api/rooms"
+        );
+        const data = await response.json();
+        const roomStats = {
+          total: data.rooms.length,
+          available: data.rooms.filter((room) => room.status === "Vacant")
+            .length,
+          occupied: data.rooms.filter((room) => room.status === "Occupied")
+            .length,
+        };
+        setStats(roomStats);
+      } catch (error) {
+        console.error("Failed to fetch room stats:", error);
+      } finally {
+        setStatsLoading(false);
+      }
     };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+    fetchRoomStats();
   }, []);
 
   const containerVariants = {
@@ -64,7 +82,7 @@ const Hero = () => {
   };
 
   return (
-    <div className="relative w-full min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800 overflow-hidden">
+    <div className="relative w-full min-h-screen bg-white dark:bg-black overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0 opacity-5 dark:opacity-10">
         <div
@@ -76,12 +94,58 @@ const Hero = () => {
         />
       </div>
 
+      <style dangerouslySetInnerHTML={{ __html: `
+        .glowing-border {
+          animation: glowing-border 4s ease-in-out infinite !important;
+        }
+        
+        @keyframes glowing-border {
+          0% {
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.4), 0 0 16px rgba(59, 130, 246, 0.3), 0 0 24px rgba(59, 130, 246, 0.2) !important;
+          }
+          25% {
+            box-shadow: 0 0 8px rgba(147, 51, 234, 0.4), 0 0 16px rgba(147, 51, 234, 0.3), 0 0 24px rgba(147, 51, 234, 0.2) !important;
+          }
+          50% {
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.4), 0 0 16px rgba(59, 130, 246, 0.3), 0 0 24px rgba(59, 130, 246, 0.2) !important;
+          }
+          75% {
+            box-shadow: 0 0 8px rgba(168, 85, 247, 0.4), 0 0 16px rgba(168, 85, 247, 0.3), 0 0 24px rgba(168, 85, 247, 0.2) !important;
+          }
+          100% {
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.4), 0 0 16px rgba(59, 130, 246, 0.3), 0 0 24px rgba(59, 130, 246, 0.2) !important;
+          }
+        }
+        
+        .dark .glowing-border {
+          animation: glowing-border-dark 4s ease-in-out infinite !important;
+        }
+        
+        @keyframes glowing-border-dark {
+          0% {
+            box-shadow: 0 0 8px rgba(99, 102, 241, 0.5), 0 0 16px rgba(99, 102, 241, 0.4), 0 0 24px rgba(99, 102, 241, 0.3) !important;
+          }
+          25% {
+            box-shadow: 0 0 8px rgba(168, 85, 247, 0.5), 0 0 16px rgba(168, 85, 247, 0.4), 0 0 24px rgba(168, 85, 247, 0.3) !important;
+          }
+          50% {
+            box-shadow: 0 0 8px rgba(99, 102, 241, 0.5), 0 0 16px rgba(99, 102, 241, 0.4), 0 0 24px rgba(99, 102, 241, 0.3) !important;
+          }
+          75% {
+            box-shadow: 0 0 8px rgba(147, 51, 234, 0.5), 0 0 16px rgba(147, 51, 234, 0.4), 0 0 24px rgba(147, 51, 234, 0.3) !important;
+          }
+          100% {
+            box-shadow: 0 0 8px rgba(99, 102, 241, 0.5), 0 0 16px rgba(99, 102, 241, 0.4), 0 0 24px rgba(99, 102, 241, 0.3) !important;
+          }
+        }
+      ` }} />
+
       {/* Main Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20 lg:py-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Left Column */}
           <motion.div
-            className="text-center lg:text-left order-2 lg:order-1"
+            className="text-center lg:text-left order-1 lg:order-1"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
@@ -89,24 +153,24 @@ const Hero = () => {
             {/* Badge */}
             <motion.div
               variants={fadeInUpVariants}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 border border-blue-200/50 dark:border-blue-700/50 backdrop-blur-sm mb-8 lg:mb-12"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-black/10 dark:bg-white/10 border border-black/20 dark:border-white/20 backdrop-blur-sm mb-8 lg:mb-12"
             >
-              <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
-              <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
+              <div className="w-2 h-2 bg-black/60 dark:bg-white/60 rounded-full animate-pulse" />
+              <span className="text-sm font-medium text-black dark:text-white">
                 Intelligent Campus Management
               </span>
             </motion.div>
 
             {/* Title */}
             <motion.div variants={itemVariants} className="mb-8 lg:mb-12">
-              <h1 className="text-4xl sm:text-5xl lg:text-7xl xl:text-8xl font-serif font-bold text-gray-900 dark:text-white mb-4 lg:mb-6 tracking-tight">
-                <span className="block bg-gradient-to-r from-gray-900 via-blue-800 to-gray-900 dark:from-white dark:via-blue-200 dark:to-white bg-clip-text text-transparent">
+              <h1 className="text-4xl sm:text-5xl lg:text-7xl xl:text-8xl font-serif font-bold text-black dark:text-white mb-4 lg:mb-6 tracking-tight">
+                <span className="block text-black dark:text-white">
                   VERILOC
                 </span>
-                <span className="block text-2xl sm:text-3xl lg:text-5xl xl:text-6xl font-light text-gray-600 dark:text-gray-300 mt-2 lg:mt-4">
+                <span className="block text-2xl sm:text-3xl lg:text-5xl xl:text-6xl font-light text-black dark:text-white mt-2 lg:mt-4">
                   Smart Classroom
                 </span>
-                <span className="block text-2xl sm:text-3xl lg:text-5xl xl:text-6xl font-light text-gray-600 dark:text-gray-300">
+                <span className="block text-2xl sm:text-3xl lg:text-5xl xl:text-6xl font-light text-black dark:text-white">
                   Management
                 </span>
               </h1>
@@ -115,7 +179,7 @@ const Hero = () => {
             {/* Description */}
             <motion.p
               variants={itemVariants}
-              className="text-lg sm:text-xl lg:text-2xl text-gray-600 dark:text-gray-300 mb-8 lg:mb-12 max-w-4xl mx-auto lg:mx-0 font-light leading-relaxed"
+              className="text-lg sm:text-xl lg:text-2xl text-black dark:text-white mb-8 lg:mb-12 max-w-4xl mx-auto lg:mx-0 font-light leading-relaxed"
             >
               Transform your educational space with intelligent occupancy
               monitoring, real-time analytics, and predictive insights that
@@ -131,7 +195,7 @@ const Hero = () => {
                 variants={itemVariants}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="group px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0"
+                className="group px-8 py-4 bg-gradient-to-r from-gray-800 to-gray-900 hover:from-gray-900 hover:to-black text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0"
                 onClick={() => {
                   const el = document.getElementById("room-search");
                   if (el)
@@ -148,7 +212,7 @@ const Hero = () => {
                 variants={itemVariants}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="px-8 py-4 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-500 transition-all duration-300"
+                className="px-8 py-4 border-2 border-black/30 dark:border-white/30 text-black dark:text-white font-semibold rounded-lg hover:bg-black/10 dark:hover:bg-white/10 hover:border-black/50 dark:hover:border-white/50 transition-all duration-300"
                 onClick={() => navigate("/about")}
               >
                 <div className="flex items-center justify-center gap-2">
@@ -161,18 +225,18 @@ const Hero = () => {
             {/* Status Indicator */}
             <motion.div
               variants={fadeInUpVariants}
-              className="inline-flex items-center gap-4 px-6 py-3 rounded-full bg-white/60 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700 backdrop-blur-sm shadow-sm"
+              className="inline-flex items-center gap-4 px-6 py-3 rounded-full bg-black/10 dark:bg-white/10 border border-black/20 dark:border-white/20 backdrop-blur-sm shadow-sm"
             >
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                <div className="w-2 h-2 bg-black/60 dark:bg-white/60 rounded-full animate-pulse" />
+                <span className="text-sm font-medium text-black dark:text-white">
                   System Status: Operational
                 </span>
               </div>
-              <div className="w-px h-4 bg-gray-300 dark:bg-gray-600" />
+              <div className="w-px h-4 bg-black/30 dark:bg-white/30" />
               <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-                <span className="text-sm text-gray-600 dark:text-gray-400">
+                <Clock className="w-4 h-4 text-black/70 dark:text-white/70" />
+                <span className="text-sm text-black/70 dark:text-white/70">
                   Updated just now
                 </span>
               </div>
@@ -181,7 +245,7 @@ const Hero = () => {
 
           {/* Right Column */}
           <motion.div
-            className="order-1 lg:order-2 [perspective:1000px]"
+            className="order-2 lg:order-2 [perspective:1000px]"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
@@ -189,42 +253,32 @@ const Hero = () => {
             <div className="relative">
               {/* Main Card */}
               <motion.div
-                className="relative bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg rounded-3xl shadow-2xl dark:shadow-gray-900/50 border border-gray-200/50 dark:border-gray-700/50 overflow-hidden transform-gpu"
-                variants={itemVariants}
-                whileHover={{ scale: 1.02 }}
-                animate={{
-                  rotateY: mousePosition.x / 40,
-                  rotateX: -mousePosition.y / 40,
-                  y: -8,
-                }}
+                className="relative bg-black/5 dark:bg-white/5 backdrop-blur-3xl rounded-3xl border border-black/10 dark:border-white/10 overflow-hidden transform-gpu glowing-border"
                 style={{
-                  transformStyle: "preserve-3d",
+                  animation: 'glowing-border 4s ease-in-out infinite',
                 }}
-                transition={{
-                  type: "spring",
-                  stiffness: 400,
-                  damping: 30,
-                }}
+                variants={itemVariants}
+                whileHover={{ scale: 1.01 }}
               >
                 {/* Card Header */}
-                <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6">
+                <div className="bg-white/20 dark:bg-black/20 backdrop-blur-xl border-b border-black/10 dark:border-white/10 p-6">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
-                        <BarChart3 className="w-6 h-6 text-white" />
+                      <div className="w-10 h-10 bg-black/10 dark:bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center border border-black/20 dark:border-white/20">
+                        <BarChart3 className="w-6 h-6 text-black dark:text-white" />
                       </div>
                       <div>
-                        <h3 className="text-white font-semibold">
+                        <h3 className="text-black dark:text-white font-semibold">
                           Live Dashboard
                         </h3>
-                        <p className="text-blue-100 text-sm">
+                        <p className="text-black/70 dark:text-white/70 text-sm">
                           Real-time monitoring
                         </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 bg-emerald-400 rounded-full animate-pulse" />
-                      <span className="text-blue-100 text-sm font-medium">
+                      <div className="w-3 h-3 bg-black/60 dark:bg-white/60 rounded-full animate-pulse" />
+                      <span className="text-black/80 dark:text-white/80 text-sm font-medium">
                         Active
                       </span>
                     </div>
@@ -235,27 +289,45 @@ const Hero = () => {
                 <div className="p-6">
                   {/* Stats */}
                   <div className="grid grid-cols-3 gap-4 mb-6">
-                    <div className="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
-                      <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                        24
+                    <div className="text-center p-3 bg-black/10 dark:bg-white/10 backdrop-blur-sm rounded-xl border border-black/20 dark:border-white/20">
+                      <div className="text-2xl font-bold text-black dark:text-white">
+                        {statsLoading ? (
+                          <div className="flex items-center justify-center">
+                            <div className="animate-pulse">...</div>
+                          </div>
+                        ) : (
+                          stats.total
+                        )}
                       </div>
-                      <div className="text-xs text-blue-600 dark:text-blue-400 uppercase tracking-wider">
+                      <div className="text-xs text-black/70 dark:text-white/70 uppercase tracking-wider">
                         Rooms
                       </div>
                     </div>
-                    <div className="text-center p-3 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl">
-                      <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
-                        8
+                    <div className="text-center p-3 bg-black/10 dark:bg-white/10 backdrop-blur-sm rounded-xl border border-black/20 dark:border-white/20">
+                      <div className="text-2xl font-bold text-black dark:text-white">
+                        {statsLoading ? (
+                          <div className="flex items-center justify-center">
+                            <div className="animate-pulse">...</div>
+                          </div>
+                        ) : (
+                          stats.available
+                        )}
                       </div>
-                      <div className="text-xs text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
+                      <div className="text-xs text-black/70 dark:text-white/70 uppercase tracking-wider">
                         Available
                       </div>
                     </div>
-                    <div className="text-center p-3 bg-amber-50 dark:bg-amber-900/20 rounded-xl">
-                      <div className="text-2xl font-bold text-amber-600 dark:text-amber-400">
-                        16
+                    <div className="text-center p-3 bg-black/10 dark:bg-white/10 backdrop-blur-sm rounded-xl border border-black/20 dark:border-white/20">
+                      <div className="text-2xl font-bold text-black dark:text-white">
+                        {statsLoading ? (
+                          <div className="flex items-center justify-center">
+                            <div className="animate-pulse">...</div>
+                          </div>
+                        ) : (
+                          stats.occupied
+                        )}
                       </div>
-                      <div className="text-xs text-amber-600 dark:text-amber-400 uppercase tracking-wider">
+                      <div className="text-xs text-black/70 dark:text-white/70 uppercase tracking-wider">
                         Occupied
                       </div>
                     </div>
@@ -267,37 +339,33 @@ const Hero = () => {
                       {
                         icon: Shield,
                         text: "Secure Access Control",
-                        color: "text-blue-600",
                       },
                       {
                         icon: Zap,
                         text: "Real-time Updates",
-                        color: "text-emerald-600",
                       },
                       {
                         icon: Eye,
                         text: "Live Monitoring",
-                        color: "text-purple-600",
                       },
                       {
                         icon: Activity,
                         text: "Analytics & Reports",
-                        color: "text-indigo-600",
                       },
                     ].map((feature, idx) => (
                       <motion.div
                         key={idx}
-                        className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800/50 rounded-xl"
+                        className="flex items-center gap-3 p-3 bg-black/10 dark:bg-white/10 backdrop-blur-sm rounded-xl border border-black/20 dark:border-white/20"
                         variants={fadeInUpVariants}
                       >
                         <div
-                          className={`p-2 rounded-lg bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600`}
+                          className={`p-2 rounded-lg bg-black/10 dark:bg-white/10 backdrop-blur-sm border border-black/20 dark:border-white/20`}
                         >
                           <feature.icon
-                            className={`w-4 h-4 ${feature.color}`}
+                            className={`w-4 h-4 text-black dark:text-white`}
                           />
                         </div>
-                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                        <span className="text-sm font-medium text-black dark:text-white">
                           {feature.text}
                         </span>
                       </motion.div>
@@ -305,28 +373,28 @@ const Hero = () => {
                   </div>
 
                   {/* Activity Status */}
-                  <div className="flex items-center justify-between p-3 bg-gradient-to-r from-emerald-50 to-green-50 dark:from-emerald-900/20 dark:to-green-900/20 rounded-xl border border-emerald-200 dark:border-emerald-800">
+                  <div className="flex items-center justify-between p-3 bg-black/10 dark:bg-white/10 backdrop-blur-sm rounded-xl border border-black/20 dark:border-white/20">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center">
-                        <Activity className="w-4 h-4 text-white" />
+                      <div className="w-8 h-8 bg-black/10 dark:bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center border border-black/20 dark:border-white/20">
+                        <Activity className="w-4 h-4 text-black dark:text-white" />
                       </div>
                       <div>
-                        <div className="text-sm font-medium text-gray-900 dark:text-white">
+                        <div className="text-sm font-medium text-black dark:text-white">
                           System Active
                         </div>
-                        <div className="text-xs text-gray-500 dark:text-gray-400">
+                        <div className="text-xs text-black/70 dark:text-white/70">
                           Last updated 2 min ago
                         </div>
                       </div>
                     </div>
                     <div className="flex gap-1">
-                      <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
+                      <div className="w-2 h-2 bg-black/60 dark:bg-white/60 rounded-full animate-pulse" />
                       <div
-                        className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"
+                        className="w-2 h-2 bg-black/60 dark:bg-white/60 rounded-full animate-pulse"
                         style={{ animationDelay: "0.2s" }}
                       />
                       <div
-                        className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"
+                        className="w-2 h-2 bg-black/60 dark:bg-white/60 rounded-full animate-pulse"
                         style={{ animationDelay: "0.4s" }}
                       />
                     </div>
@@ -336,7 +404,7 @@ const Hero = () => {
 
               {/* Floating Elements */}
               <motion.div
-                className="absolute -top-4 -right-4 w-20 h-20 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full opacity-20 blur-xl"
+                className="absolute -top-4 -right-4 w-20 h-20 bg-black/10 dark:bg-white/10 rounded-full opacity-30 blur-2xl"
                 animate={{
                   scale: [1, 1.2, 1],
                   rotate: [0, 180, 360],
@@ -350,7 +418,7 @@ const Hero = () => {
                 }}
               />
               <motion.div
-                className="absolute -bottom-6 -left-6 w-16 h-16 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-full opacity-20 blur-xl"
+                className="absolute -bottom-6 -left-6 w-16 h-16 bg-black/10 dark:bg-white/10 rounded-full opacity-30 blur-2xl"
                 animate={{
                   scale: [1.2, 1, 1.2],
                   rotate: [360, 180, 0],
@@ -364,7 +432,7 @@ const Hero = () => {
                 }}
               />
               <motion.div
-                className="absolute top-1/2 -right-8 w-24 h-24 bg-gradient-to-br from-emerald-400 to-teal-400 rounded-full opacity-15 blur-xl"
+                className="absolute top-1/2 -right-8 w-24 h-24 bg-black/10 dark:bg-white/10 rounded-full opacity-20 blur-2xl"
                 animate={{
                   scale: [1, 1.3, 1],
                   x: [0, 15, 0],
@@ -376,7 +444,7 @@ const Hero = () => {
                 }}
               />
               <motion.div
-                className="absolute top-1/4 -left-8 w-28 h-28 bg-gradient-to-br from-blue-400 to-indigo-400 rounded-full opacity-15 blur-xl"
+                className="absolute top-1/4 -left-8 w-28 h-28 bg-black/10 dark:bg-white/10 rounded-full opacity-20 blur-2xl"
                 animate={{
                   scale: [1.2, 1, 1.2],
                   x: [-15, 0, -15],
@@ -392,8 +460,6 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Bottom Gradient */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white dark:from-gray-900 to-transparent pointer-events-none" />
     </div>
   );
 };

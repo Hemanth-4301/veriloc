@@ -47,17 +47,17 @@
   }
 
   .status-vacant {
-    @apply bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium;
+    @apply bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm font-medium;
   }
   .dark .status-vacant {
-    @apply bg-green-900 text-green-200;
+    @apply bg-gray-800 text-gray-200;
   }
 
   .status-occupied {
-    @apply bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-medium;
+    @apply bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm font-medium;
   }
   .dark .status-occupied {
-    @apply bg-red-900 text-red-200;
+    @apply bg-gray-800 text-gray-200;
   }
 
   .gradient-bg {
@@ -107,31 +107,31 @@
   }
 
   .badge-success {
-    @apply bg-green-100 text-green-800;
+    @apply bg-gray-100 text-gray-800;
   }
   .dark .badge-success {
-    @apply bg-green-900 text-green-200;
+    @apply bg-gray-800 text-gray-200;
   }
 
   .badge-danger {
-    @apply bg-red-100 text-red-800;
+    @apply bg-gray-100 text-gray-800;
   }
   .dark .badge-danger {
-    @apply bg-red-900 text-red-200;
+    @apply bg-gray-800 text-gray-200;
   }
 
   .badge-info {
-    @apply bg-blue-100 text-blue-800;
+    @apply bg-gray-100 text-gray-800;
   }
   .dark .badge-info {
-    @apply bg-blue-900 text-blue-200;
+    @apply bg-gray-800 text-gray-200;
   }
 
   .badge-warning {
-    @apply bg-yellow-100 text-yellow-800;
+    @apply bg-gray-100 text-gray-800;
   }
   .dark .badge-warning {
-    @apply bg-yellow-900 text-yellow-200;
+    @apply bg-gray-800 text-gray-200;
   }
 }
 

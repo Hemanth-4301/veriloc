@@ -199,84 +199,84 @@ const AdminDashboard = () => {
   const renderOverview = () => (
     <div className="space-y-4 sm:space-y-6 lg:space-y-8">
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
-        <div className="card p-4 sm:p-5 lg:p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]">
-          <div className="flex items-center justify-between">
-            <div className="min-w-0 flex-1">
-              <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400 truncate">
-                Total Rooms
-              </p>
-              <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-gray-100 mt-1">
-                {stats.totalRooms}
-              </p>
-            </div>
-            <div className="p-2 sm:p-3 bg-gray-100 dark:bg-gray-800 rounded-xl flex-shrink-0 ml-3">
-              <MapPin className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-gray-600 dark:text-gray-400" />
-            </div>
-          </div>
-          <div className="mt-3 sm:mt-4 flex items-center text-xs sm:text-sm text-gray-600 dark:text-gray-400">
-            <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4 mr-1 flex-shrink-0" />
-            <span className="truncate">+12% from last week</span>
-          </div>
-        </div>
-
-        <div className="card p-4 sm:p-5 lg:p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]">
-          <div className="flex items-center justify-between">
-            <div className="min-w-0 flex-1">
-              <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400 truncate">
-                Vacant Rooms
-              </p>
-              <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-green-600 dark:text-green-400 mt-1">
-                {stats.vacantRooms}
-              </p>
-            </div>
-            <div className="p-2 sm:p-3 bg-green-100 dark:bg-green-900/20 rounded-xl flex-shrink-0 ml-3">
-              <Activity className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-green-600 dark:text-green-400" />
-            </div>
-          </div>
-          <div className="mt-3 sm:mt-4 flex items-center text-xs sm:text-sm text-green-600 dark:text-green-400">
-            <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 mr-1 flex-shrink-0" />
-            <span className="truncate">Available now</span>
-          </div>
-        </div>
-
-        <div className="card p-4 sm:p-5 lg:p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]">
-          <div className="flex items-center justify-between">
-            <div className="min-w-0 flex-1">
-              <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400 truncate">
-                Occupied Rooms
-              </p>
-              <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-red-600 dark:text-red-400 mt-1">
-                {stats.occupiedRooms}
-              </p>
-            </div>
-            <div className="p-2 sm:p-3 bg-red-100 dark:bg-red-900/20 rounded-xl flex-shrink-0 ml-3">
-              <Users className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-red-600 dark:text-red-400" />
-            </div>
-          </div>
-          <div className="mt-3 sm:mt-4 flex items-center text-xs sm:text-sm text-red-600 dark:text-red-400">
-            <Clock className="h-3 w-3 sm:h-4 sm:w-4 mr-1 flex-shrink-0" />
-            <span className="truncate">In use</span>
-          </div>
-        </div>
-
-        <div className="card p-4 sm:p-5 lg:p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]">
-          <div className="flex items-center justify-between">
-            <div className="min-w-0 flex-1">
-              <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400 truncate">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+        <div className="card p-3 sm:p-4 lg:p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]">
+          <div className="flex flex-col items-center sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3">
+            <div className="flex flex-col items-center sm:items-start sm:flex-1 min-w-0">
+              <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400 text-center sm:text-left">
                 Total Admins
               </p>
-              <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-gray-100 mt-1">
+              <p className="text-lg sm:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-gray-100 mt-1">
                 {stats.totalAdmins}
               </p>
             </div>
-            <div className="p-2 sm:p-3 bg-gray-100 dark:bg-gray-800 rounded-xl flex-shrink-0 ml-3">
-              <Shield className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-gray-600 dark:text-gray-400" />
+            <div className="p-1.5 sm:p-2 lg:p-3 bg-gray-100 dark:bg-gray-800 rounded-xl flex-shrink-0">
+              <Shield className="h-3 w-3 sm:h-4 sm:w-4 lg:h-5 lg:w-6 text-gray-600 dark:text-gray-400" />
             </div>
           </div>
-          <div className="mt-3 sm:mt-4 flex items-center text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+          <div className="mt-2 sm:mt-3 lg:mt-4 flex items-center justify-center sm:justify-start text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+            <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4 mr-1 flex-shrink-0" />
+            <span>+12% from last week</span>
+          </div>
+        </div>
+
+        <div className="card p-3 sm:p-4 lg:p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]">
+          <div className="flex flex-col items-center sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3">
+            <div className="flex flex-col items-center sm:items-start sm:flex-1 min-w-0">
+              <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400 text-center sm:text-left">
+                Vacant Rooms
+              </p>
+              <p className="text-lg sm:text-2xl lg:text-3xl font-bold text-green-600 dark:text-green-400 mt-1">
+                {stats.vacantRooms}
+              </p>
+            </div>
+            <div className="p-1.5 sm:p-2 lg:p-3 bg-green-100 dark:bg-green-900/20 rounded-xl flex-shrink-0">
+              <Activity className="h-3 w-3 sm:h-4 sm:w-4 lg:h-5 lg:w-6 text-green-600 dark:text-green-400" />
+            </div>
+          </div>
+          <div className="mt-2 sm:mt-3 lg:mt-4 flex items-center justify-center sm:justify-start text-xs sm:text-sm text-green-600 dark:text-green-400">
+            <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 mr-1 flex-shrink-0" />
+            <span>Available now</span>
+          </div>
+        </div>
+
+        <div className="card p-3 sm:p-4 lg:p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]">
+          <div className="flex flex-col items-center sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3">
+            <div className="flex flex-col items-center sm:items-start sm:flex-1 min-w-0">
+              <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400 text-center sm:text-left">
+                Occupied Rooms
+              </p>
+              <p className="text-lg sm:text-2xl lg:text-3xl font-bold text-red-600 dark:text-red-400 mt-1">
+                {stats.occupiedRooms}
+              </p>
+            </div>
+            <div className="p-1.5 sm:p-2 lg:p-3 bg-red-100 dark:bg-red-900/20 rounded-xl flex-shrink-0">
+              <Users className="h-3 w-3 sm:h-4 sm:w-4 lg:h-5 lg:w-6 text-red-600 dark:text-red-400" />
+            </div>
+          </div>
+          <div className="mt-2 sm:mt-3 lg:mt-4 flex items-center justify-center sm:justify-start text-xs sm:text-sm text-red-600 dark:text-red-400">
+            <Clock className="h-3 w-3 sm:h-4 sm:w-4 mr-1 flex-shrink-0" />
+            <span>In use</span>
+          </div>
+        </div>
+
+        <div className="card p-3 sm:p-4 lg:p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]">
+          <div className="flex flex-col items-center sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3">
+            <div className="flex flex-col items-center sm:items-start sm:flex-1 min-w-0">
+              <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400 text-center sm:text-left">
+                Total Admins
+              </p>
+              <p className="text-lg sm:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-gray-100 mt-1">
+                {stats.totalAdmins}
+              </p>
+            </div>
+            <div className="p-1.5 sm:p-2 lg:p-3 bg-gray-100 dark:bg-gray-800 rounded-xl flex-shrink-0">
+              <Shield className="h-3 w-3 sm:h-4 sm:w-4 lg:h-5 lg:w-6 text-gray-600 dark:text-gray-400" />
+            </div>
+          </div>
+          <div className="mt-2 sm:mt-3 lg:mt-4 flex items-center justify-center sm:justify-start text-xs sm:text-sm text-gray-600 dark:text-gray-400">
             <Users className="h-3 w-3 sm:h-4 sm:w-4 mr-1 flex-shrink-0" />
-            <span className="truncate">Active users</span>
+            <span>Active users</span>
           </div>
         </div>
       </div>
@@ -487,87 +487,88 @@ const AdminDashboard = () => {
         );
       case "settings":
         return (
-          <div className="space-y-6">
-            <div className="card p-6">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-6">
+          <div className="space-y-4 sm:space-y-6">
+            <div className="card p-4 sm:p-6">
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4 sm:mb-6">
                 System Settings
               </h2>
-              <div className="space-y-6">
-                <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
-                  <h3 className="font-medium text-blue-900 dark:text-blue-100 mb-2">
+              <div className="space-y-4 sm:space-y-6">
+                <div className="p-3 sm:p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
+                  <h3 className="font-medium text-blue-900 dark:text-blue-100 mb-2 text-sm sm:text-base">
                     Hardware Integration
                   </h3>
                   <p className="text-sm text-blue-700 dark:text-blue-300 mb-3">
                     To update room status from hardware, send POST requests to:
                   </p>
-                  <code className="block p-3 bg-blue-100 dark:bg-blue-800 rounded-lg text-xs font-mono">
-                    POST /api/rooms/update
-                  </code>
-                  <p className="text-xs text-blue-600 dark:text-blue-400 mt-2">
-                    Body:{" "}
-                    {`{ "roomNumber": "R101", "status": "Occupied", "fingerprintID": 1001 }`}
+                  <div className="overflow-x-auto">
+                    <code className="block p-2 sm:p-3 bg-blue-100 dark:bg-blue-800 rounded-lg text-xs font-mono whitespace-nowrap sm:whitespace-pre">
+                      POST /api/rooms/update
+                    </code>
+                  </div>
+                  <p className="text-xs text-blue-600 dark:text-blue-400 mt-2 break-words">
+                    Body: {`{ "roomNumber": "R101", "status": "Occupied", "fingerprintID": 1001 }`}
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
-                    <h3 className="font-medium text-gray-900 dark:text-gray-100 mb-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                  <div className="p-3 sm:p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                    <h3 className="font-medium text-gray-900 dark:text-gray-100 mb-3 text-sm sm:text-base">
                       System Status
                     </h3>
-                    <div className="space-y-2">
-                      <div className="flex justify-between">
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center">
                         <span className="text-sm text-gray-600 dark:text-gray-400">
                           Database
                         </span>
-                        <span className="text-sm text-green-600 dark:text-green-400">
+                        <span className="text-xs sm:text-sm text-green-600 dark:text-green-400 font-medium">
                           Connected
                         </span>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex justify-between items-center">
                         <span className="text-sm text-gray-600 dark:text-gray-400">
                           API Server
                         </span>
-                        <span className="text-sm text-green-600 dark:text-green-400">
+                        <span className="text-xs sm:text-sm text-green-600 dark:text-green-400 font-medium">
                           Running
                         </span>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex justify-between items-center">
                         <span className="text-sm text-gray-600 dark:text-gray-400">
                           Hardware
                         </span>
-                        <span className="text-sm text-yellow-600 dark:text-yellow-400">
+                        <span className="text-xs sm:text-sm text-yellow-600 dark:text-yellow-400 font-medium">
                           Standby
                         </span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
-                    <h3 className="font-medium text-gray-900 dark:text-gray-100 mb-2">
+                  <div className="p-3 sm:p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                    <h3 className="font-medium text-gray-900 dark:text-gray-100 mb-3 text-sm sm:text-base">
                       Quick Stats
                     </h3>
-                    <div className="space-y-2">
-                      <div className="flex justify-between">
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center">
                         <span className="text-sm text-gray-600 dark:text-gray-400">
                           Uptime
                         </span>
-                        <span className="text-sm text-gray-900 dark:text-gray-100">
+                        <span className="text-xs sm:text-sm text-gray-900 dark:text-gray-100 font-medium">
                           99.9%
                         </span>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex justify-between items-center">
                         <span className="text-sm text-gray-600 dark:text-gray-400">
                           Last Backup
                         </span>
-                        <span className="text-sm text-gray-900 dark:text-gray-100">
+                        <span className="text-xs sm:text-sm text-gray-900 dark:text-gray-100 font-medium">
                           2 hours ago
                         </span>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex justify-between items-center">
                         <span className="text-sm text-gray-600 dark:text-gray-400">
                           Version
                         </span>
-                        <span className="text-sm text-gray-900 dark:text-gray-100">
+                        <span className="text-xs sm:text-sm text-gray-900 dark:text-gray-100 font-medium">
                           v1.0.0
                         </span>
                       </div>

@@ -11,9 +11,9 @@ const LoadingSpinner = ({ size = "default", text = "Loading..." }) => {
   return (
     <div className="flex flex-col items-center justify-center py-8">
       <Loader2
-        className={`${sizeClasses[size]} animate-spin text-primary-600 mb-4`}
+        className={`${sizeClasses[size]} animate-spin text-black dark:text-white mb-4`}
       />
-      <p className="text-gray-600 dark:text-gray-400">{text}</p>
+      <p className="text-black dark:text-white">{text}</p>
     </div>
   );
 };

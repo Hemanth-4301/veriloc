@@ -91,16 +91,6 @@ const Home = () => {
     occupied: rooms.filter((room) => room.status === "Occupied").length,
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen gradient-bg flex items-center justify-center">
-        <div className="glass-card-strong p-8 animate-pulse-slow">
-          <LoadingSpinner />
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-light-50 dark:bg-black">
       {/* Hero Section */}
@@ -238,7 +228,13 @@ const Home = () => {
                   </span>
                 </div>
               </div>
-              <RoomList rooms={filteredRooms} showActions={false} />
+              {loading ? (
+                <div className="flex justify-center items-center py-12">
+                  <LoadingSpinner text="Loading rooms..." />
+                </div>
+              ) : (
+                <RoomList rooms={filteredRooms} showActions={false} />
+              )}
             </div>
           </div>
 

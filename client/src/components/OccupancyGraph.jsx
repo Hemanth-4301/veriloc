@@ -26,9 +26,11 @@ const OccupancyGraph = ({ data = [], onDownload, onFilter }) => {
   const handleDownload = () => {
     if (chartRef.current) {
       const canvas = chartRef.current.canvas;
-      const url = canvas.toDataURL('image/png');
-      const link = document.createElement('a');
-      link.download = `occupancy-chart-${new Date().toISOString().split('T')[0]}.png`;
+      const url = canvas.toDataURL("image/png");
+      const link = document.createElement("a");
+      link.download = `occupancy-chart-${
+        new Date().toISOString().split("T")[0]
+      }.png`;
       link.href = url;
       link.click();
     }
@@ -206,7 +208,9 @@ const OccupancyGraph = ({ data = [], onDownload, onFilter }) => {
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-4">
         <div className="flex items-center space-x-2">
           <Filter className="h-4 w-4 text-gray-500 flex-shrink-0" />
-          <span className="text-sm text-gray-600 dark:text-gray-400 truncate">Chart Controls</span>
+          <span className="text-sm text-gray-600 dark:text-gray-400 truncate">
+            Chart Controls
+          </span>
         </div>
         <div className="flex flex-wrap gap-2 sm:space-x-2">
           {onFilter && (
@@ -227,11 +231,34 @@ const OccupancyGraph = ({ data = [], onDownload, onFilter }) => {
           </button>
         </div>
       </div>
-      
+
       {/* Chart Container - Fixed width containment */}
       <div className="w-full max-w-full overflow-hidden">
-        <div className="h-48 sm:h-56 md:h-64 w-full min-w-0">
-          <Bar ref={chartRef} data={chartData} options={options} />
+        <div
+          className="relative h-48 sm:h-56 md:h-64 w-full min-w-0"
+          style={{ touchAction: "pan-y pinch-zoom" }}
+        >
+          <Bar
+            ref={chartRef}
+            data={chartData}
+            options={{
+              ...options,
+              maintainAspectRatio: false,
+              responsive: true,
+              scales: {
+                ...options.scales,
+                x: {
+                  ...options.scales.x,
+                  ticks: {
+                    ...options.scales.x.ticks,
+                    maxRotation: window.innerWidth < 640 ? 45 : 0,
+                    autoSkip: true,
+                    maxTicksLimit: window.innerWidth < 640 ? 5 : 7,
+                  },
+                },
+              },
+            }}
+          />
         </div>
       </div>
     </div>
