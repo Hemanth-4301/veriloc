@@ -129,18 +129,28 @@ const Navbar = () => {
 
           {/* Right side actions */}
           <div className="flex items-center space-x-4">
-            {/* Dark mode toggle */}
-            <button
-              onClick={toggleDarkMode}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-              title={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
-            >
-              {isDarkMode ? (
-                <Sun className="h-5 w-5 text-gray-600 dark:text-gray-400" />
-              ) : (
-                <Moon className="h-5 w-5 text-gray-600 dark:text-gray-400" />
-              )}
-            </button>
+            {/* Animated Theme Switch */}
+            <div className="flex items-center justify-center ml-2">
+              <label className="switch" title={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}>
+                <input 
+                  type="checkbox" 
+                  checked={isDarkMode} 
+                  onChange={toggleDarkMode}
+                />
+                <span className="slider">
+                  <div className="star star_1"></div>
+                  <div className="star star_2"></div>
+                  <div className="star star_3"></div>
+                  <svg viewBox="0 0 16 16" className="cloud_1 cloud">
+                    <path
+                      transform="matrix(.77976 0 0 .78395-299.99-418.63)"
+                      fill="#fff"
+                      d="m391.84 540.91c-.421-.329-.949-.524-1.523-.524-1.351 0-2.451 1.084-2.485 2.435-1.395.526-2.388 1.88-2.388 3.466 0 1.874 1.385 3.423 3.182 3.667v.034h12.73v-.006c1.775-.104 3.182-1.584 3.182-3.395 0-1.747-1.309-3.186-2.994-3.379.007-.106.011-.214.011-.322 0-2.707-2.271-4.901-5.072-4.901-2.073 0-3.856 1.202-4.643 2.925"
+                    ></path>
+                  </svg>
+                </span>
+              </label>
+            </div>
 
             {/* User menu */}
             {admin && (
@@ -278,5 +288,109 @@ const Navbar = () => {
     </nav>
   );
 };
+
+// Add styles for the theme switch
+const styles = `
+  /* Theme Switch */
+  .switch {
+    font-size: 17px;
+    position: relative;
+    display: inline-block;
+    width: 3.5em;
+    height: 2em;
+    border-radius: 30px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+  }
+
+  /* Hide default HTML checkbox */
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  /* The slider */
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #2a2a2a;
+    transition: 0.4s;
+    border-radius: 30px;
+    overflow: hidden;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 1.2em;
+    width: 1.2em;
+    border-radius: 20px;
+    left: 0.4em;
+    bottom: 0.4em;
+    transition: 0.4s;
+    transition-timing-function: cubic-bezier(0.81, -0.04, 0.38, 1.5);
+    box-shadow: inset 8px -4px 0px 0px #fff;
+  }
+
+  .switch input:checked + .slider {
+    background-color: #00a6ff;
+  }
+
+  .switch input:checked + .slider:before {
+    transform: translateX(1.5em);
+    box-shadow: inset 15px -4px 0px 15px #ffcf48;
+  }
+
+  .star {
+    background-color: #fff;
+    border-radius: 50%;
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    transition: all 0.4s;
+  }
+
+  .star_1 {
+    left: 2em;
+    top: 0.4em;
+  }
+
+  .star_2 {
+    left: 1.7em;
+    top: 1em;
+  }
+
+  .star_3 {
+    left: 2.5em;
+    top: 0.8em;
+  }
+
+  .switch input:checked ~ .slider .star {
+    opacity: 0;
+  }
+
+  .cloud {
+    width: 3em;
+    position: absolute;
+    bottom: -1.2em;
+    left: -0.8em;
+    opacity: 0;
+    transition: all 0.4s;
+  }
+
+  .switch input:checked ~ .slider .cloud {
+    opacity: 1;
+  }
+`;
+
+// Add styles to the document head
+const styleElement = document.createElement('style');
+styleElement.textContent = styles;
+document.head.appendChild(styleElement);
 
 export default Navbar;
