@@ -175,13 +175,7 @@ const Hero = () => {
 
             {/* Title */}
             <motion.div 
-             initial={{y:-100}}
-             animate={{y:0}}
-             transition={{duration:0.3,
-              type:"spring",
-              stiffness:300,
-              damping:10,
-             }}
+              variants={itemVariants}
              className="mb-8 lg:mb-12">
               <h1 className="text-4xl sm:text-5xl lg:text-7xl xl:text-8xl font-serif font-bold text-black dark:text-white mb-4 lg:mb-6 tracking-tight">
                 <span className="block text-black dark:text-white">
