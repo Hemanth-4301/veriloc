@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "./LoadingSpinner.jsx";
+
 import {
   BookOpen,
   ArrowRight,
@@ -173,7 +174,15 @@ const Hero = () => {
             </motion.div>
 
             {/* Title */}
-            <motion.div variants={itemVariants} className="mb-8 lg:mb-12">
+            <motion.div 
+             initial={{y:-100}}
+             animate={{y:0}}
+             transition={{duration:0.3,
+              type:"spring",
+              stiffness:300,
+              damping:10,
+             }}
+             className="mb-8 lg:mb-12">
               <h1 className="text-4xl sm:text-5xl lg:text-7xl xl:text-8xl font-serif font-bold text-black dark:text-white mb-4 lg:mb-6 tracking-tight">
                 <span className="block text-black dark:text-white">
                   VERILOC

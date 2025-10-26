@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext.jsx";
 import { Eye, EyeOff, Loader2, Shield, ArrowRight } from "lucide-react";
 import toast from "react-hot-toast";
+import { motion } from "framer-motion";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -55,7 +56,16 @@ const Login = () => {
   `;
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center p-4 sm:p-6 relative overflow-hidden">
+    <motion.div  
+     initial={{y:-300}}
+     animate={{y:0}}
+     transition={{duration:0.3,
+      type:"spring",
+      stiffness:300,
+      damping:10,
+     }}
+
+     className="min-h-screen bg-white dark:bg-black flex items-center justify-center p-4 sm:p-6 relative overflow-hidden">
       <style dangerouslySetInnerHTML={{ __html: addKeyframes }} />
       
       <div className="w-full max-w-md relative z-10">
@@ -170,7 +180,7 @@ const Login = () => {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
