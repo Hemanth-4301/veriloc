@@ -405,7 +405,7 @@ router.post(
       );
 
       res.json({
-        message: "gorgeous ganu bro..",
+        message: "Room status updated successfully",
         room: {
           roomNumber: room.roomNumber,
           status: room.status,
