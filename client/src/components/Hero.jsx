@@ -290,9 +290,9 @@ const Hero = () => {
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 bg-black/60 dark:bg-white/60 rounded-full" />
-                      <span className="text-black/80 dark:text-white/80 text-sm font-medium">
+                    <div className="flex items-center  gap-2">
+                      <div className="w-3 h-3 bg-green-500  rounded-full" />
+                      <span className="text-green-500 text-sm font-medium">
                         Active
                       </span>
                     </div>

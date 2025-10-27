@@ -382,15 +382,6 @@ router.post(
         return res.status(404).json({ message: "Room not found" });
       }
 
-      // Check if admin is authorized for this room
-      if (!room.isAdminAuthorized(admin._id)) {
-        console.log(
-          `Unauthorized hardware update attempt: Admin ${admin.username} (${fingerprintID}) for room ${roomNumber}`
-        );
-        return res
-          .status(403)
-          .json({ message: "Admin not authorized for this room" });
-      }
 
       // Store old status for activity logging
       const oldStatus = room.status;
