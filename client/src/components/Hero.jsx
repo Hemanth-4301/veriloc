@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "./LoadingSpinner.jsx";
-import BubbleParticles from "./BubbleParticles.jsx";
 
 import {
   BookOpen,
@@ -87,9 +86,6 @@ const Hero = () => {
     <div className="relative w-full min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 dark:from-gray-900 dark:via-blue-950/20 dark:to-gray-900 overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0">
-        {/* Bubble Particles */}
-        <BubbleParticles count={15} />
-
         {/* Blue gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-100/40 via-transparent to-blue-200/30 dark:from-blue-900/20 dark:via-transparent dark:to-blue-800/10"></div>
 
