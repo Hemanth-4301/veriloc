@@ -1,0 +1,15 @@
+| **Component**                  | **Pin Name**  | **ESP32 Pin** | **Description / Function**                                           |
+| ------------------------------ | ------------- | ------------- | -------------------------------------------------------------------- |
+| **R307 Fingerprint Sensor**    | VCC           | 5V            | Powers the fingerprint module                                        |
+|                                | GND           | GND           | Common ground                                                        |
+|                                | TX            | GPIO16 (RX2)  | Sensor transmits data to ESP32                                       |
+|                                | RX            | GPIO17 (TX2)  | ESP32 transmits data to sensor                                       |
+| **LCD Display (16x2, I2C)**    | VCC           | 5V            | Powers the display                                                   |
+|                                | GND           | GND           | Common ground                                                        |
+|                                | SDA           | GPIO21        | I2C data line                                                        |
+|                                | SCL           | GPIO22        | I2C clock line                                                       |
+| **Push Button 1 – “Vacant”**   | Signal pin    | GPIO12        | Triggers *Vacant* status / enroll mode                               |
+|                                | Other pin     | GND           | Pull-down reference                                                  |
+| **Push Button 2 – “Occupied”** | Signal pin    | GPIO13        | Triggers *Occupied* status                                           |
+|                                | Other pin     | GND           | Pull-down reference                                                  |
+| **ESP32 Board Power**          | USB (Micro-B) | —             | Provides 5V power and serial communication for programming/debugging |
