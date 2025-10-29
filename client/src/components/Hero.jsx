@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "./LoadingSpinner.jsx";
+import BubbleParticles from "./BubbleParticles.jsx";
 
 import {
   BookOpen,
@@ -86,14 +87,17 @@ const Hero = () => {
     <div className="relative w-full min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 dark:from-gray-900 dark:via-blue-950/20 dark:to-gray-900 overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0">
+        {/* Bubble Particles */}
+        <BubbleParticles count={15} />
+
         {/* Blue gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-100/40 via-transparent to-blue-200/30 dark:from-blue-900/20 dark:via-transparent dark:to-blue-800/10"></div>
-        
+
         {/* Animated blue orbs */}
         <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400/10 rounded-full blur-3xl"></div>
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/8 rounded-full blur-3xl"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-blue-300/5 rounded-full blur-3xl"></div>
-        
+
         {/* Dot pattern */}
         <div className="absolute inset-0 opacity-5 dark:opacity-10">
           <div
@@ -106,7 +110,9 @@ const Hero = () => {
         </div>
       </div>
 
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
         .glowing-border {
           animation: glowing-border 4s ease-in-out infinite !important;
         }
@@ -150,7 +156,9 @@ const Hero = () => {
             box-shadow: 0 0 8px rgba(99, 102, 241, 0.5), 0 0 16px rgba(99, 102, 241, 0.4), 0 0 24px rgba(99, 102, 241, 0.3) !important;
           }
         }
-      ` }} />
+      `,
+        }}
+      />
 
       {/* Main Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20 lg:py-24">
@@ -174,9 +182,7 @@ const Hero = () => {
             </motion.div>
 
             {/* Title */}
-            <motion.div 
-              variants={itemVariants}
-             className="mb-8 lg:mb-12">
+            <motion.div variants={itemVariants} className="mb-8 lg:mb-12">
               <h1 className="text-4xl sm:text-5xl lg:text-7xl xl:text-8xl font-serif font-bold text-black dark:text-white mb-4 lg:mb-6 tracking-tight">
                 <span className="block text-black dark:text-white">
                   VERILOC
@@ -269,7 +275,7 @@ const Hero = () => {
               <motion.div
                 className="relative bg-black/5 dark:bg-white/5 backdrop-blur-3xl rounded-3xl border border-black/10 dark:border-white/10 overflow-hidden transform-gpu glowing-border"
                 style={{
-                  animation: 'glowing-border 4s ease-in-out',
+                  animation: "glowing-border 4s ease-in-out",
                 }}
                 variants={itemVariants}
                 whileHover={{ scale: 1.01 }}
@@ -403,12 +409,8 @@ const Hero = () => {
                     </div>
                     <div className="flex gap-1">
                       <div className="w-2 h-2 bg-black/60 dark:bg-white/60 rounded-full" />
-                      <div
-                        className="w-2 h-2 bg-black/60 dark:bg-white/60 rounded-full"
-                      />
-                      <div
-                        className="w-2 h-2 bg-black/60 dark:bg-white/60 rounded-full"
-                      />
+                      <div className="w-2 h-2 bg-black/60 dark:bg-white/60 rounded-full" />
+                      <div className="w-2 h-2 bg-black/60 dark:bg-white/60 rounded-full" />
                     </div>
                   </div>
                 </div>
@@ -471,7 +473,6 @@ const Hero = () => {
           </motion.div>
         </div>
       </div>
-
     </div>
   );
 };
