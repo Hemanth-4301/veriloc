@@ -21,7 +21,7 @@ const RoomList = ({ rooms = [], showActions = false, onRoomUpdate }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
+  const [itemsPerPage] = useState(6);
 
   const handleEdit = (room) => {
     if (editingId && editingId !== room._id) {
@@ -147,11 +147,58 @@ const RoomList = ({ rooms = [], showActions = false, onRoomUpdate }) => {
     return matchesSearch && matchesStatus;
   });
 
+  // Group rooms by roomNumber and day
+  const groupedRooms = filteredRooms.reduce((acc, room) => {
+    const key = `${room.roomNumber}-${room.day}`;
+    if (!acc[key]) {
+      acc[key] = {
+        roomNumber: room.roomNumber,
+        day: room.day,
+        slots: [],
+      };
+    }
+    acc[key].slots.push({
+      _id: room._id,
+      duration: room.duration,
+      status: room.status,
+      authorizedAdmins: room.authorizedAdmins,
+    });
+    return acc;
+  }, {});
+
+  // Convert grouped rooms to array and sort slots by duration
+  const groupedRoomsArray = Object.values(groupedRooms).map((group) => {
+    // Sort slots by start time
+    group.slots.sort((a, b) => {
+      const aStart = a.duration.split("-")[0];
+      const bStart = b.duration.split("-")[0];
+      return aStart.localeCompare(bStart);
+    });
+    return group;
+  });
+
+  // Sort by room number, then by day
+  groupedRoomsArray.sort((a, b) => {
+    if (a.roomNumber !== b.roomNumber) {
+      return a.roomNumber.localeCompare(b.roomNumber);
+    }
+    const dayOrder = [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+    ];
+    return dayOrder.indexOf(a.day) - dayOrder.indexOf(b.day);
+  });
+
   // Pagination logic
-  const totalPages = Math.ceil(filteredRooms.length / itemsPerPage);
+  const totalPages = Math.ceil(groupedRoomsArray.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const paginatedRooms = filteredRooms.slice(startIndex, endIndex);
+  const paginatedRooms = groupedRoomsArray.slice(startIndex, endIndex);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -198,165 +245,194 @@ const RoomList = ({ rooms = [], showActions = false, onRoomUpdate }) => {
 
       {/* Rooms Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-        {paginatedRooms.map((room, index) => (
+        {paginatedRooms.map((roomGroup, groupIndex) => (
           <div
-            key={`${room._id}-${index}`}
+            key={`${roomGroup.roomNumber}-${roomGroup.day}-${groupIndex}`}
             className="card p-4 sm:p-6 hover:shadow-lg transition-all duration-300"
           >
-            <div className="flex items-start justify-between mb-3 sm:mb-4">
-              <div className="flex items-center space-x-2 min-w-0 flex-1">
-                <MapPin className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600 dark:text-gray-400 flex-shrink-0" />
-                <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100 truncate">
-                  {room.roomNumber}
+            {/* Card Header */}
+            <div className="mb-4 pb-3 border-b border-gray-200 dark:border-gray-700">
+              <div className="flex items-center space-x-2 mb-2">
+                <MapPin className="h-5 w-5 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+                <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
+                  Room {roomGroup.roomNumber}
                 </h3>
               </div>
-              <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
-                <span
-                  className={`badge text-xs ${
-                    room.status === "Vacant" ? "badge-success" : "badge-danger"
-                  }`}
-                >
-                  {room.status}
-                </span>
-                {showActions && (
-                  <div className="flex items-center space-x-1">
-                    <button
-                      onClick={() => handleEdit(room)}
-                      className="p-1.5 sm:p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
-                      disabled={
-                        loading || (editingId && editingId !== room._id)
-                      }
-                    >
-                      {loading && editingId === room._id ? (
-                        <Loader2 className="h-3 w-3 sm:h-4 sm:w-4 text-gray-600 dark:text-gray-400 animate-spin" />
-                      ) : (
-                        <Edit className="h-3 w-3 sm:h-4 sm:w-4 text-gray-600 dark:text-gray-400" />
-                      )}
-                    </button>
-                    <button
-                      onClick={() => handleDelete(room._id)}
-                      className="p-1.5 sm:p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
-                    >
-                      <Trash2 className="h-3 w-3 sm:h-4 sm:w-4 text-red-600 dark:text-red-400" />
-                    </button>
-                  </div>
-                )}
+              <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
+                <Calendar className="h-4 w-4" />
+                <span className="text-sm font-medium">{roomGroup.day}</span>
               </div>
             </div>
 
-            {editingId === room._id ? (
-              <div className="space-y-3">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Room Number
-                  </label>
-                  <input
-                    type="text"
-                    value={editData.roomNumber}
-                    onChange={(e) =>
-                      setEditData({ ...editData, roomNumber: e.target.value })
-                    }
-                    className="input-field mt-1"
-                    placeholder="Room number"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Duration
-                  </label>
-                  <select
-                    value={editData.duration}
-                    onChange={(e) =>
-                      setEditData({ ...editData, duration: e.target.value })
-                    }
-                    className="input-field mt-1"
-                    required
-                  >
-                    <option value="">Select duration</option>
-                    <option value="9:00-10:00">9:00-10:00</option>
-                    <option value="10:00-11:00">10:00-11:00</option>
-                    <option value="11:30-12:30">11:30-12:30</option>
-                    <option value="12:30-1:30">12:30-1:30</option>
-                    <option value="2:30-3:30">2:30-3:30</option>
-                    <option value="3:30-4:30">3:30-4:30</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Day
-                  </label>
-                  <select
-                    value={editData.day}
-                    onChange={(e) =>
-                      setEditData({ ...editData, day: e.target.value })
-                    }
-                    className="input-field mt-1"
-                  >
-                    {[
-                      "Monday",
-                      "Tuesday",
-                      "Wednesday",
-                      "Thursday",
-                      "Friday",
-                      "Saturday",
-                      "Sunday",
-                    ].map((day) => (
-                      <option key={day} value={day}>
-                        {day}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Status
-                  </label>
-                  <select
-                    value={editData.status}
-                    onChange={(e) =>
-                      setEditData({ ...editData, status: e.target.value })
-                    }
-                    className="input-field mt-1"
-                  >
-                    <option value="Vacant">Vacant</option>
-                    <option value="Occupied">Occupied</option>
-                  </select>
-                </div>
-                {/* Save / Cancel buttons inside edit panel so they're always visible */}
-                <div className="pt-3 border-t border-gray-200 dark:border-gray-700 flex space-x-2">
-                  <button
-                    onClick={() => handleSave(room._id)}
-                    disabled={loading}
-                    className="flex-1 btn-primary flex items-center justify-center"
-                  >
-                    {loading ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    ) : (
-                      <>
-                        <Check className="h-4 w-4 mr-2" />
-                        Save
-                      </>
+            {/* Time Slots */}
+            <div className="space-y-2">
+              {roomGroup.slots.map((slot, slotIndex) => (
+                <div
+                  key={slot._id}
+                  className={`flex items-center justify-between p-3 rounded-lg border ${
+                    slot.status === "Vacant"
+                      ? "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800"
+                      : "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800"
+                  }`}
+                >
+                  <div className="flex items-center space-x-2 flex-1">
+                    <Clock className="h-4 w-4 text-gray-600 dark:text-gray-400 flex-shrink-0" />
+                    <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                      {slot.duration}
+                    </span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <span
+                      className={`badge text-xs ${
+                        slot.status === "Vacant"
+                          ? "badge-success"
+                          : "badge-danger"
+                      }`}
+                    >
+                      {slot.status}
+                    </span>
+                    {showActions && (
+                      <div className="flex items-center space-x-1">
+                        <button
+                          onClick={() => {
+                            // Find the full room object for editing
+                            const fullRoom = rooms.find(
+                              (r) => r._id === slot._id
+                            );
+                            if (fullRoom) handleEdit(fullRoom);
+                          }}
+                          className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
+                          disabled={
+                            loading || (editingId && editingId !== slot._id)
+                          }
+                        >
+                          {loading && editingId === slot._id ? (
+                            <Loader2 className="h-3 w-3 text-gray-600 dark:text-gray-400 animate-spin" />
+                          ) : (
+                            <Edit className="h-3 w-3 text-gray-600 dark:text-gray-400" />
+                          )}
+                        </button>
+                        <button
+                          onClick={() => handleDelete(slot._id)}
+                          className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
+                          disabled={loading}
+                        >
+                          <Trash2 className="h-3 w-3 text-red-600 dark:text-red-400" />
+                        </button>
+                      </div>
                     )}
-                  </button>
-                  <button
-                    onClick={handleCancel}
-                    disabled={loading}
-                    className="flex-1 btn-secondary flex items-center justify-center"
-                  >
-                    <X className="h-4 w-4 mr-2" />
-                    Cancel
-                  </button>
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
-                  <Calendar className="h-4 w-4" />
-                  <span className="text-sm">{room.day}</span>
-                </div>
-                <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
-                  <Clock className="h-4 w-4" />
-                  <span className="text-sm">{room.duration}</span>
+              ))}
+            </div>
+
+            {/* Edit Form - Show if any slot in this group is being edited */}
+            {roomGroup.slots.some((slot) => editingId === slot._id) && (
+              <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                  Edit Slot
+                </h4>
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                      Room Number
+                    </label>
+                    <input
+                      type="text"
+                      value={editData.roomNumber}
+                      onChange={(e) =>
+                        setEditData({ ...editData, roomNumber: e.target.value })
+                      }
+                      className="input-field mt-1"
+                      placeholder="Room number"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                      Duration
+                    </label>
+                    <select
+                      value={editData.duration}
+                      onChange={(e) =>
+                        setEditData({ ...editData, duration: e.target.value })
+                      }
+                      className="input-field mt-1"
+                      required
+                    >
+                      <option value="">Select duration</option>
+                      <option value="9:00-10:00">9:00-10:00</option>
+                      <option value="10:00-11:00">10:00-11:00</option>
+                      <option value="11:30-12:30">11:30-12:30</option>
+                      <option value="12:30-1:30">12:30-1:30</option>
+                      <option value="2:30-3:30">2:30-3:30</option>
+                      <option value="3:30-4:30">3:30-4:30</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                      Day
+                    </label>
+                    <select
+                      value={editData.day}
+                      onChange={(e) =>
+                        setEditData({ ...editData, day: e.target.value })
+                      }
+                      className="input-field mt-1"
+                    >
+                      {[
+                        "Monday",
+                        "Tuesday",
+                        "Wednesday",
+                        "Thursday",
+                        "Friday",
+                        "Saturday",
+                        "Sunday",
+                      ].map((day) => (
+                        <option key={day} value={day}>
+                          {day}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                      Status
+                    </label>
+                    <select
+                      value={editData.status}
+                      onChange={(e) =>
+                        setEditData({ ...editData, status: e.target.value })
+                      }
+                      className="input-field mt-1"
+                    >
+                      <option value="Vacant">Vacant</option>
+                      <option value="Occupied">Occupied</option>
+                    </select>
+                  </div>
+                  <div className="flex space-x-2 pt-2">
+                    <button
+                      onClick={() => handleSave(editingId)}
+                      disabled={loading}
+                      className="flex-1 btn-primary flex items-center justify-center text-sm py-2"
+                    >
+                      {loading ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <>
+                          <Check className="h-4 w-4 mr-1" />
+                          Save
+                        </>
+                      )}
+                    </button>
+                    <button
+                      onClick={handleCancel}
+                      disabled={loading}
+                      className="flex-1 btn-secondary flex items-center justify-center text-sm py-2"
+                    >
+                      <X className="h-4 w-4 mr-1" />
+                      Cancel
+                    </button>
+                  </div>
                 </div>
               </div>
             )}
@@ -369,8 +445,8 @@ const RoomList = ({ rooms = [], showActions = false, onRoomUpdate }) => {
         <div className="flex flex-col sm:flex-row items-center justify-between mt-6 sm:mt-8 space-y-3 sm:space-y-0">
           <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 text-center sm:text-left">
             Showing {startIndex + 1} to{" "}
-            {Math.min(endIndex, filteredRooms.length)} of {filteredRooms.length}{" "}
-            rooms
+            {Math.min(endIndex, groupedRoomsArray.length)} of{" "}
+            {groupedRoomsArray.length} room groups
           </div>
           <div className="flex items-center space-x-1 sm:space-x-2">
             <button

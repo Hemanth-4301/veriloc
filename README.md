@@ -7,6 +7,7 @@ This README provides a detailed flow of how the project works, including hardwar
 ---
 
 ## Table of Contents
+
 1. [System Overview](#system-overview)
 2. [Hardware Components and Setup](#hardware-components-and-setup)
 3. [Software Architecture](#software-architecture)
@@ -30,18 +31,22 @@ This README provides a detailed flow of how the project works, including hardwar
 ## System Overview
 
 **VERILOC** enables secure management of classroom occupancy through fingerprint-based authentication. The system has two primary user roles:
+
 - **Superadmin**: Enrolls admins by capturing their fingerprints using an R307 fingerprint sensor connected to an ESP32, assigns a unique 4-digit `fingerprintID` (1000–9999) displayed on an SSD1306 OLED, and adds admin details to the database via a web-based Admin Dashboard. The superadmin also manages classroom assignments.
 - **Admins**: Update classroom statuses (Vacant or Occupied) by scanning their fingerprints on the R307 sensor, with feedback shown on the OLED.
 
 **Key Features**:
+
 - Fingerprint enrollment with duplicate detection and 4-digit `fingerprintID`.
 - Secure admin authentication via JWT for the Admin Dashboard.
+- **Intelligent file upload for bulk room creation** - Upload PDF, DOCX, or images and automatically extract room data using AI.
 - Classroom status updates with fingerprint verification.
 - Real-time OLED feedback for all hardware interactions.
 - Responsive React frontend with Tailwind CSS for public room viewing and admin management.
 - MongoDB backend with REST APIs for secure data handling.
 
 **Components**:
+
 - **Hardware**: ESP32, R307 fingerprint sensor, SSD1306 OLED (128x64), two push buttons (Vacant and Occupied).
 - **Backend**: Node.js with Express, MongoDB with Mongoose, JWT, bcrypt.
 - **Frontend**: React with Tailwind CSS, Axios, React Router, Chart.js.
@@ -51,6 +56,7 @@ This README provides a detailed flow of how the project works, including hardwar
 ## Hardware Components and Setup
 
 ### Components
+
 1. **ESP32 Development Board** (e.g., ESP32-WROOM-32):
    - Microcontroller with WiFi for processing and communication.
 2. **R307 Fingerprint Sensor**:
@@ -64,24 +70,26 @@ This README provides a detailed flow of how the project works, including hardwar
    - Breadboard, jumper wires, optional 10kΩ resistors for buttons.
 
 ### Circuit Connections
-| Component                | Pin on Component | Pin on ESP32       | Notes                                      |
-|--------------------------|------------------|--------------------|--------------------------------------------|
-| **R307 Fingerprint Sensor** |                  |                    |                                            |
-| VCC                      | VCC              | 3.3V               | Power supply (3.3V–6V compatible)         |
-| GND                      | GND              | GND                | Ground connection                         |
-| TX                       | TX               | GPIO16 (RXD2)      | Serial RX on ESP32                        |
-| RX                       | RX               | GPIO17 (TXD2)      | Serial TX on ESP32                        |
-| **SSD1306 OLED Display** |                  |                    | I2C, address 0x3C                         |
-| VCC                      | VCC              | 3.3V               | Power supply                              |
-| GND                      | GND              | GND                | Ground connection                         |
-| SCL                      | SCL              | GPIO22 (SCL)       | I2C clock line                            |
-| SDA                      | SDA              | GPIO21 (SDA)       | I2C data line                             |
-| **Vacant Button**        | One terminal     | GPIO12             | Active LOW, internal pull-up              |
-|                          | Other terminal   | GND                | Ground connection                         |
-| **Occupied Button**      | One terminal     | GPIO13             | Active LOW, internal pull-up              |
-|                          | Other terminal   | GND                | Ground connection                         |
+
+| Component                   | Pin on Component | Pin on ESP32  | Notes                             |
+| --------------------------- | ---------------- | ------------- | --------------------------------- |
+| **R307 Fingerprint Sensor** |                  |               |                                   |
+| VCC                         | VCC              | 3.3V          | Power supply (3.3V–6V compatible) |
+| GND                         | GND              | GND           | Ground connection                 |
+| TX                          | TX               | GPIO16 (RXD2) | Serial RX on ESP32                |
+| RX                          | RX               | GPIO17 (TXD2) | Serial TX on ESP32                |
+| **SSD1306 OLED Display**    |                  |               | I2C, address 0x3C                 |
+| VCC                         | VCC              | 3.3V          | Power supply                      |
+| GND                         | GND              | GND           | Ground connection                 |
+| SCL                         | SCL              | GPIO22 (SCL)  | I2C clock line                    |
+| SDA                         | SDA              | GPIO21 (SDA)  | I2C data line                     |
+| **Vacant Button**           | One terminal     | GPIO12        | Active LOW, internal pull-up      |
+|                             | Other terminal   | GND           | Ground connection                 |
+| **Occupied Button**         | One terminal     | GPIO13        | Active LOW, internal pull-up      |
+|                             | Other terminal   | GND           | Ground connection                 |
 
 ### Notes
+
 - **Power**: ESP32 provides 3.3V for R307 and OLED. Use USB or 5V VIN for ESP32.
 - **Pull-ups**: Buttons use internal pull-up resistors on GPIO12/13. Add 10kΩ external pull-ups if unstable.
 - **Safety**: Verify connections to avoid shorts. Use a multimeter for continuity.
@@ -91,6 +99,7 @@ This README provides a detailed flow of how the project works, including hardwar
 ## Software Architecture
 
 ### Backend (Node.js, Express, MongoDB)
+
 - **Purpose**: Handles data storage, admin authentication, and room status updates.
 - **Models**:
   - **Admin**: `{ username, password (hashed), email, fingerprintID (unique, 1000–9999) }`.
@@ -104,9 +113,11 @@ This README provides a detailed flow of how the project works, including hardwar
     - `GET /`: List rooms, filter by day/duration/roomNumber.
     - `POST /`, `PUT /:id`, `DELETE /:id`: Manage rooms (protected).
     - `POST /update`: Update room status from hardware, verify `fingerprintID`.
+    - `POST /upload`: Upload file (PDF/DOCX/Image) to extract and create multiple rooms with AI (protected).
 - **Security**: JWT for Admin Dashboard, bcrypt for passwords, unique `fingerprintID`.
 
 ### Frontend (React, Tailwind CSS)
+
 - **Purpose**: Provides a public interface for room status viewing and a secure Admin Dashboard.
 - **Routes**:
   - `/`: Homepage with room list and occupancy graph.
@@ -121,6 +132,7 @@ This README provides a detailed flow of how the project works, including hardwar
 - **UI**: Tailwind CSS with gradients, shadow cards, hover effects, responsive design.
 
 ### Hardware (ESP32)
+
 - **Sketches**:
   - `enroll_admin.ino`: Enrolls admins with 4-digit `fingerprintID`, displays on OLED.
   - `veriloc.ino`: Authenticates fingerprints, updates room status, shows OLED feedback.
@@ -131,6 +143,7 @@ This README provides a detailed flow of how the project works, including hardwar
 ## Workflows
 
 ### Admin Enrollment (Superadmin)
+
 1. **Setup Hardware**:
    - Connect ESP32, R307, OLED, and buttons as per the circuit table.
    - Load `enroll_admin.ino` via Arduino IDE.
@@ -155,20 +168,33 @@ This README provides a detailed flow of how the project works, including hardwar
    - Verify admin in Admins List.
 
 ### Room Management (Superadmin)
+
 1. **Access Admin Dashboard**:
    - Log in at `/login` with superadmin credentials.
    - Navigate to `/admin`.
 2. **Create/Edit Room**:
-   - In RoomForm, enter:
-     - Room Number: “ROOM_101”
-     - Day: “Monday”
-     - Duration: “9:00-10:00”
-     - Status: “Vacant”
-     - Authorized Admins: Select “john (ID: 1001)”
-   - Submit to create room.
+   - **Manual Entry**:
+     - In RoomForm, enter:
+       - Room Number: "ROOM_101"
+       - Day: "Monday"
+       - Duration: "9:00-10:00"
+       - Status: "Vacant"
+       - Authorized Admins: Select "john (ID: 1001)"
+     - Submit to create room.
+   - **Bulk Upload via File** (NEW):
+     - In RoomForm, check "Upload file to extract room data"
+     - Click "Choose File" and select a PDF, DOCX, or image file
+     - The system will:
+       1. Extract text from the file
+       2. Process it with Google Gemini AI
+       3. Format data into structured room entries
+       4. Create rooms automatically with validation
+     - Review results showing successful and failed entries
+     - See detailed documentation in `ROOM_UPLOAD_FEATURE.md`
    - Edit/delete rooms in Admin Dashboard as needed.
 
 ### Classroom Status Update (Admin)
+
 1. **Setup Hardware**:
    - Load `veriloc.ino` with correct WiFi credentials and server URL.
    - Power ESP32 in the classroom (e.g., ROOM_101).
@@ -194,6 +220,7 @@ This README provides a detailed flow of how the project works, including hardwar
 ## Setup Instructions
 
 ### Hardware Setup
+
 1. **Assemble Circuit**:
    - Connect components as per the circuit table.
    - Verify with a multimeter to avoid shorts.
@@ -212,6 +239,7 @@ This README provides a detailed flow of how the project works, including hardwar
    - Upload sketch.
 
 ### Backend Setup
+
 1. **Prerequisites**:
    - Install Node.js (v16+), MongoDB (local or Atlas).
 2. **Clone Repository**:
@@ -237,6 +265,7 @@ This README provides a detailed flow of how the project works, including hardwar
    - Server runs on `http://localhost:5000`.
 
 ### Frontend Setup
+
 1. **Prerequisites**:
    - Install Node.js (v16+).
 2. **Navigate to Frontend**:
@@ -264,6 +293,7 @@ This README provides a detailed flow of how the project works, including hardwar
 ## Testing the System
 
 ### Enrollment Testing
+
 1. **Setup**:
    - Load `enroll_admin.ino`, connect hardware, open Serial Monitor.
 2. **Test Cases**:
@@ -276,6 +306,7 @@ This README provides a detailed flow of how the project works, including hardwar
    - Verify in Admins List.
 
 ### Room Management Testing
+
 1. **Create Room**:
    - In Admin Dashboard, create ROOM_101, assign admin (ID 1001).
    - Verify in RoomList and MongoDB.
@@ -284,6 +315,7 @@ This README provides a detailed flow of how the project works, including hardwar
    - Delete ROOM_101, verify removal.
 
 ### Status Update Testing
+
 1. **Setup**:
    - Load `veriloc.ino`, ensure backend is running.
    - Authorize admin (ID 1001) for ROOM_101.
@@ -296,6 +328,7 @@ This README provides a detailed flow of how the project works, including hardwar
 ---
 
 ## Debugging Tips
+
 - **Hardware**:
   - **OLED Blank**: Check I2C connections (GPIO21/22), verify address (0x3C).
   - **Sensor Failure**: Ensure R307 TX/RX on GPIO16/17, 3.3V power.
@@ -313,6 +346,7 @@ This README provides a detailed flow of how the project works, including hardwar
 ---
 
 ## Folder Structure
+
 ```
 veriloc/
 ├── hardware/
@@ -349,13 +383,64 @@ veriloc/
 ---
 
 ## Dependencies
+
 - **Hardware**: Arduino IDE, ESP32 board support, Adafruit_Fingerprint, Adafruit_GFX, Adafruit_SSD1306.
-- **Backend**: express, mongoose, bcryptjs, jsonwebtoken, cors, dotenv.
-- **Frontend**: react, axios, react-router-dom, chart.js, react-chartjs-2, tailwindcss.
+- **Backend**: express, mongoose, bcryptjs, jsonwebtoken, cors, dotenv, multer, pdf-parse, mammoth, tesseract.js, @google/generative-ai.
+- **Frontend**: react, axios, react-router-dom, chart.js, react-chartjs-2, tailwindcss, lucide-react.
+
+---
+
+## Intelligent Room Upload Feature
+
+VERILOC now includes an **AI-powered file upload feature** that allows administrators to bulk-create rooms by uploading documents. This feature uses:
+
+- **Text Extraction**: Supports PDF, DOCX, and image files (with OCR)
+- **Google Gemini AI**: Intelligently parses and formats room data
+- **Smart Validation**: Checks for conflicts, validates formats, and provides detailed feedback
+
+### How It Works
+
+1. Admin uploads a file containing room scheduling information
+2. System extracts text from the file (PDF parsing, DOCX extraction, or OCR for images)
+3. Extracted text is sent to Google Gemini AI for intelligent parsing
+4. Gemini formats data into structured room objects with validation
+5. System creates rooms in database with conflict detection
+6. Admin receives detailed results (successful and failed entries)
+
+### Supported Formats
+
+- PDF files (.pdf)
+- Microsoft Word documents (.docx, .doc)
+- Images (.png, .jpg, .jpeg, .gif, .bmp, .tiff)
+
+### Key Benefits
+
+- **High Accuracy**: Gemini AI ensures precise data extraction
+- **Time Saving**: Create dozens of rooms in seconds
+- **Flexible Input**: Accepts various file formats and text layouts
+- **Smart Validation**: Prevents duplicates and conflicts
+- **Detailed Feedback**: Shows exactly what succeeded and what failed
+
+### Documentation
+
+- **Complete Guide**: See `ROOM_UPLOAD_FEATURE.md` for full documentation
+- **Quick Start**: See `QUICK_START_UPLOAD.md` for testing instructions
+- **Sample Data**: See `SAMPLE_ROOM_DATA.md` for expected file formats
+
+### Example Usage
+
+```
+Room R101 - Monday 9:00-10:00 Vacant
+Room R101 - Monday 10:00-11:00 Occupied
+Room R102 - Tuesday 2:30-3:30 Vacant
+```
+
+Simply paste this into a document, save as PDF or DOCX, and upload!
 
 ---
 
 ## Future Enhancements
+
 - Add buzzer/LED for hardware feedback.
 - Implement real-time WebSocket updates for RoomList.
 - Deploy backend to Heroku and frontend to Vercel with HTTPS.
@@ -365,6 +450,7 @@ veriloc/
 ---
 
 ## License
+
 MIT License. See `LICENSE` file for details.
 
 ---

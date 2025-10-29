@@ -28,7 +28,9 @@ import AdminForm from "../components/AdminForm.jsx";
 import AdminList from "../components/AdminList.jsx";
 import RoomForm from "../components/RoomForm.jsx";
 import RoomList from "../components/RoomList.jsx";
+import RoomManagement from "../components/RoomManagement.jsx";
 import OccupancyGraph from "../components/OccupancyGraph.jsx";
+import FacultyAttendance from "../components/FacultyAttendance.jsx";
 import api from "../services/api.js";
 import toast from "react-hot-toast";
 
@@ -54,6 +56,7 @@ const AdminDashboard = () => {
     { id: "admins", label: "Admins", icon: Users, adminOnly: true },
     { id: "rooms", label: "Rooms", icon: MapPin },
     { id: "analytics", label: "Analytics", icon: BarChart3 },
+    { id: "attendance", label: "Attendance", icon: Clock },
     { id: "settings", label: "Settings", icon: Settings },
   ];
 
@@ -132,10 +135,10 @@ const AdminDashboard = () => {
 
   const fetchDashboardData = useCallback(async () => {
     const results = await Promise.allSettled([
-          api.get("/rooms"),
-          api.get("/auth/admins"),
-          api.get("/rooms/occupancy"),
-        ]);
+      api.get("/rooms"),
+      api.get("/auth/admins"),
+      api.get("/rooms/occupancy"),
+    ]);
 
     const roomsResult = results[0];
     const adminsResult = results[1];
@@ -183,7 +186,7 @@ const AdminDashboard = () => {
     }
 
     // Recent Activity
-      await fetchRecentActivity();
+    await fetchRecentActivity();
   }, []);
 
   const handleRoomUpdate = useCallback(async () => {
@@ -295,7 +298,9 @@ const AdminDashboard = () => {
             </h3>
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-              <span className="text-xs text-blue-600 dark:text-blue-400 font-medium">Ready</span>
+              <span className="text-xs text-blue-600 dark:text-blue-400 font-medium">
+                Ready
+              </span>
             </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -365,9 +370,19 @@ const AdminDashboard = () => {
               Recent Activity
             </h3>
             <div className="flex items-center space-x-2">
-              <div className={`w-2 h-2 rounded-full animate-pulse ${recentActivityLoading ? 'bg-blue-500' : 'bg-green-500'}`}></div>
-              <span className={`text-xs font-medium ${recentActivityLoading ? 'text-blue-600 dark:text-blue-400' : 'text-green-600 dark:text-green-400'}`}>
-                {recentActivityLoading ? 'Loading' : 'Live'}
+              <div
+                className={`w-2 h-2 rounded-full animate-pulse ${
+                  recentActivityLoading ? "bg-blue-500" : "bg-green-500"
+                }`}
+              ></div>
+              <span
+                className={`text-xs font-medium ${
+                  recentActivityLoading
+                    ? "text-blue-600 dark:text-blue-400"
+                    : "text-green-600 dark:text-green-400"
+                }`}
+              >
+                {recentActivityLoading ? "Loading" : "Live"}
               </span>
             </div>
           </div>
@@ -378,18 +393,24 @@ const AdminDashboard = () => {
                 <div className="relative mb-6">
                   {/* Outer rotating ring */}
                   <div className="w-20 h-20 border-4 border-blue-200 dark:border-blue-800 rounded-full animate-spin">
-                    <div className="absolute top-0 left-0 w-20 h-20 border-4 border-transparent border-t-blue-500 dark:border-t-blue-400 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
+                    <div
+                      className="absolute top-0 left-0 w-20 h-20 border-4 border-transparent border-t-blue-500 dark:border-t-blue-400 rounded-full animate-spin"
+                      style={{
+                        animationDirection: "reverse",
+                        animationDuration: "1.5s",
+                      }}
+                    ></div>
                   </div>
-                  
+
                   {/* Inner pulsing dot */}
                   <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-blue-500 dark:bg-blue-400 rounded-full animate-ping"></div>
-                  
+
                   {/* Center icon */}
                   <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6 h-6 bg-white dark:bg-gray-900 rounded-full flex items-center justify-center shadow-lg">
                     <Activity className="h-3 w-3 text-blue-500 dark:text-blue-400" />
                   </div>
                 </div>
-                
+
                 {/* Loading text with animation */}
                 <div className="space-y-2">
                   <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
@@ -397,25 +418,37 @@ const AdminDashboard = () => {
                   </p>
                   <div className="flex items-center justify-center space-x-1">
                     <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
-                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                    <div
+                      className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
+                      style={{ animationDelay: "0.1s" }}
+                    ></div>
+                    <div
+                      className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
+                      style={{ animationDelay: "0.2s" }}
+                    ></div>
                   </div>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
                     Fetching recent system activity
                   </p>
                 </div>
-                
+
                 {/* Progress bar */}
                 <div className="w-48 mt-4">
                   <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
-                    <div className="bg-gradient-to-r from-blue-500 to-purple-600 h-1.5 rounded-full animate-pulse" style={{ width: '60%' }}></div>
+                    <div
+                      className="bg-gradient-to-r from-blue-500 to-purple-600 h-1.5 rounded-full animate-pulse"
+                      style={{ width: "60%" }}
+                    ></div>
                   </div>
                 </div>
               </div>
             ) : recentActivity.length > 0 ? (
               // Show activities
               recentActivity.map((activity) => (
-                <div key={activity.id} className="flex items-start space-x-3 p-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-xl transition-all duration-200 hover:shadow-sm">
+                <div
+                  key={activity.id}
+                  className="flex items-start space-x-3 p-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-xl transition-all duration-200 hover:shadow-sm"
+                >
                   <div className="p-2 bg-indigo-50 dark:bg-gray-700 rounded-lg border border-indigo-100 dark:border-gray-600 flex-shrink-0">
                     <activity.icon className="h-4 w-4 text-indigo-600 dark:text-gray-300" />
                   </div>
@@ -435,8 +468,12 @@ const AdminDashboard = () => {
                 <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-4">
                   <Activity className="h-8 w-8 text-gray-400" />
                 </div>
-                <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">No recent activity</p>
-                <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">Activity will appear here when actions are performed</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">
+                  No recent activity
+                </p>
+                <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                  Activity will appear here when actions are performed
+                </p>
               </div>
             )}
           </div>
@@ -460,7 +497,9 @@ const AdminDashboard = () => {
               }`}
             >
               <RefreshCw
-                className={`h-3 w-3 sm:h-4 sm:w-4 ${analyticsLoading ? "animate-spin" : ""} flex-shrink-0`}
+                className={`h-3 w-3 sm:h-4 sm:w-4 ${
+                  analyticsLoading ? "animate-spin" : ""
+                } flex-shrink-0`}
               />
               <span className="font-medium hidden sm:inline whitespace-nowrap">
                 {analyticsLoading ? "Refreshing..." : "Refresh"}
@@ -491,6 +530,9 @@ const AdminDashboard = () => {
       case "rooms":
         return (
           <div className="space-y-6">
+            {admin?.isSuperAdmin && (
+              <RoomManagement onRoomsUpdated={handleRoomUpdate} />
+            )}
             <RoomForm onRoomCreated={handleRoomUpdate} />
             <RoomList
               rooms={rooms}
@@ -534,6 +576,12 @@ const AdminDashboard = () => {
             </div>
           </div>
         );
+      case "attendance":
+        return (
+          <div className="w-full">
+            <FacultyAttendance />
+          </div>
+        );
       case "settings":
         return (
           <div className="space-y-4 sm:space-y-6">
@@ -555,7 +603,8 @@ const AdminDashboard = () => {
                     </code>
                   </div>
                   <p className="text-xs text-blue-600 dark:text-blue-400 mt-2 break-words">
-                    Body: {`{ "roomNumber": "R101", "status": "Occupied", "fingerprintID": 1001 }`}
+                    Body:{" "}
+                    {`{ "roomNumber": "R101", "status": "Occupied", "fingerprintID": 1001 }`}
                   </p>
                 </div>
 
@@ -652,7 +701,11 @@ const AdminDashboard = () => {
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             className="p-1.5 sm:p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors flex-shrink-0"
           >
-            {isSidebarOpen ? <X size={18} className="sm:w-5 sm:h-5" /> : <Menu size={18} className="sm:w-5 sm:h-5" />}
+            {isSidebarOpen ? (
+              <X size={18} className="sm:w-5 sm:h-5" />
+            ) : (
+              <Menu size={18} className="sm:w-5 sm:h-5" />
+            )}
           </button>
         </div>
       </div>
@@ -708,7 +761,10 @@ const AdminDashboard = () => {
                         }
                       `}
                     >
-                      <item.icon size={18} className="lg:w-5 lg:h-5 flex-shrink-0" />
+                      <item.icon
+                        size={18}
+                        className="lg:w-5 lg:h-5 flex-shrink-0"
+                      />
                       <span className="font-medium truncate">{item.label}</span>
                       {activeTab === item.id && (
                         <div className="ml-auto w-1.5 h-1.5 lg:w-2 lg:h-2 bg-white dark:bg-black rounded-full flex-shrink-0"></div>
@@ -772,15 +828,15 @@ const AdminDashboard = () => {
 
           {/* Content */}
           <div className="px-3 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8 max-w-full overflow-hidden">
-            <div className="max-w-7xl mx-auto w-full">
-              {renderContent()}
-            </div>
+            <div className="max-w-7xl mx-auto w-full">{renderContent()}</div>
           </div>
         </div>
       </div>
 
       {/* Global CSS for Chart.js containment */}
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
         /* Ensure Chart.js canvas doesn't cause horizontal scrolling */
         .chartjs-render-monitor,
         canvas {
@@ -795,7 +851,9 @@ const AdminDashboard = () => {
           overflow: hidden !important;
           max-width: 100% !important;
         }
-      ` }} />
+      `,
+        }}
+      />
     </div>
   );
 };

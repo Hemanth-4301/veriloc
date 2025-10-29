@@ -7,15 +7,17 @@ const activitySchema = new mongoose.Schema(
       required: [true, "Activity type is required"],
       enum: [
         "admin_login",
-        "admin_logout", 
+        "admin_logout",
         "room_created",
         "room_updated",
         "room_deleted",
         "room_status_changed",
+        "room_clear_all",
+        "rooms_make_all_vacant",
         "admin_created",
         "admin_updated",
         "admin_deleted",
-        "system"
+        "system",
       ],
     },
     message: {

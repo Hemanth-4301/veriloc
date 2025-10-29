@@ -4,6 +4,9 @@ const Room = require("../models/Room");
 const Admin = require("../models/Admin");
 const ActivityService = require("../services/activityService");
 const { authenticateToken } = require("../middleware/auth");
+const upload = require("../middleware/upload");
+const textExtractionService = require("../services/textExtractionService");
+const geminiService = require("../services/geminiService");
 
 const router = express.Router();
 
@@ -185,7 +188,10 @@ router.post(
     } catch (error) {
       console.error("Create room error:", error);
       if (error.code === 11000) {
-        return res.status(400).json({ message: "This exact room configuration already exists. Please check room number, day, and time slot." });
+        return res.status(400).json({
+          message:
+            "This exact room configuration already exists. Please check room number, day, and time slot.",
+        });
       }
       res.status(500).json({ message: "Room creation failed" });
     }
@@ -307,14 +313,167 @@ router.put(
     } catch (error) {
       console.error("Update room error:", error);
       if (error.code === 11000) {
-        return res
-          .status(400)
-          .json({ message: "This exact room configuration already exists. Please check room number, day, and time slot." });
+        return res.status(400).json({
+          message:
+            "This exact room configuration already exists. Please check room number, day, and time slot.",
+        });
       }
       res.status(500).json({ message: "Update failed" });
     }
   }
 );
+
+// DELETE /api/rooms/clear-all - Clear all rooms from database (Protected - Super Admin only)
+router.delete("/clear-all", authenticateToken, async (req, res) => {
+  try {
+    // Check if user is super admin
+    const admin = await Admin.findById(req.admin.id);
+    if (!admin || !admin.isSuperAdmin) {
+      return res
+        .status(403)
+        .json({ message: "Access denied. Super admin only." });
+    }
+
+    // Delete all rooms
+    const result = await Room.deleteMany({});
+
+    // Log activity
+    await ActivityService.logActivity(
+      "room_clear_all",
+      `Cleared all rooms from database (${result.deletedCount} rooms deleted)`,
+      req.admin.id
+    );
+
+    res.json({
+      message: "All rooms cleared successfully",
+      deletedCount: result.deletedCount,
+    });
+  } catch (error) {
+    console.error("Clear all rooms error:", error);
+    res.status(500).json({ message: "Failed to clear rooms" });
+  }
+});
+
+// POST /api/rooms/make-all-vacant - Make all room combinations vacant (Protected - Super Admin only)
+router.post("/make-all-vacant", authenticateToken, async (req, res) => {
+  try {
+    // Check if user is super admin
+    const admin = await Admin.findById(req.admin.id);
+    if (!admin || !admin.isSuperAdmin) {
+      return res
+        .status(403)
+        .json({ message: "Access denied. Super admin only." });
+    }
+
+    const { roomNumbers, days, timeSlots } = req.body;
+
+    // Validate input
+    if (!Array.isArray(roomNumbers) || roomNumbers.length === 0) {
+      return res
+        .status(400)
+        .json({ message: "Room numbers array is required" });
+    }
+    if (!Array.isArray(days) || days.length === 0) {
+      return res.status(400).json({ message: "Days array is required" });
+    }
+    if (!Array.isArray(timeSlots) || timeSlots.length === 0) {
+      return res.status(400).json({ message: "Time slots array is required" });
+    }
+
+    const validDays = [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+    ];
+    const invalidDays = days.filter((day) => !validDays.includes(day));
+    if (invalidDays.length > 0) {
+      return res
+        .status(400)
+        .json({ message: `Invalid days: ${invalidDays.join(", ")}` });
+    }
+
+    // Validate duration format
+    const durationRegex = /^\d{1,2}:\d{2}-\d{1,2}:\d{2}$/;
+    const invalidSlots = timeSlots.filter((slot) => !durationRegex.test(slot));
+    if (invalidSlots.length > 0) {
+      return res
+        .status(400)
+        .json({
+          message: `Invalid time slot format: ${invalidSlots.join(", ")}`,
+        });
+    }
+
+    const results = {
+      total: 0,
+      created: 0,
+      updated: 0,
+      failed: 0,
+      errors: [],
+    };
+
+    // Create all combinations
+    for (const roomNumber of roomNumbers) {
+      for (const day of days) {
+        for (const duration of timeSlots) {
+          results.total++;
+          try {
+            // Check if room with this combination already exists
+            const existingRoom = await Room.findOne({
+              roomNumber: roomNumber.trim().toUpperCase(),
+              day,
+              duration: duration.trim(),
+            });
+
+            if (existingRoom) {
+              // Update to vacant if it exists
+              existingRoom.status = "Vacant";
+              existingRoom.authorizedAdmins = [req.admin.id];
+              await existingRoom.save();
+              results.updated++;
+            } else {
+              // Create new room entry
+              await Room.create({
+                roomNumber: roomNumber.trim().toUpperCase(),
+                day,
+                duration: duration.trim(),
+                status: "Vacant",
+                authorizedAdmins: [req.admin.id],
+              });
+              results.created++;
+            }
+          } catch (error) {
+            results.failed++;
+            results.errors.push({
+              room: roomNumber,
+              day,
+              duration,
+              error: error.message,
+            });
+          }
+        }
+      }
+    }
+
+    // Log activity
+    await ActivityService.logActivity(
+      "rooms_make_all_vacant",
+      `Made all room combinations vacant (${results.created} created, ${results.updated} updated, ${results.failed} failed)`,
+      req.admin.id
+    );
+
+    res.json({
+      message: `Successfully processed ${results.total} room combinations`,
+      results,
+    });
+  } catch (error) {
+    console.error("Make all vacant error:", error);
+    res.status(500).json({ message: "Failed to make rooms vacant" });
+  }
+});
 
 // DELETE /api/rooms/:id - Delete room (Protected)
 router.delete("/:id", authenticateToken, async (req, res) => {
@@ -381,7 +540,6 @@ router.post(
         );
         return res.status(404).json({ message: "Room not found" });
       }
-
 
       // Store old status for activity logging
       const oldStatus = room.status;
@@ -495,5 +653,155 @@ router.get("/analytics", async (req, res) => {
     res.status(500).json({ message: "Failed to fetch analytics data" });
   }
 });
+
+// POST /api/rooms/upload - Upload file and extract room data (Protected)
+router.post(
+  "/upload",
+  authenticateToken,
+  upload.single("file"),
+  async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ message: "No file uploaded" });
+      }
+
+      console.log("File upload received:", {
+        filename: req.file.originalname,
+        mimetype: req.file.mimetype,
+        size: req.file.size,
+      });
+
+      // Step 1: Extract text from the uploaded file
+      let extractedText;
+      try {
+        extractedText = await textExtractionService.extractText(
+          req.file.buffer,
+          req.file.mimetype
+        );
+        console.log(
+          "Text extracted successfully:",
+          extractedText.substring(0, 200) + "..."
+        );
+      } catch (error) {
+        console.error("Text extraction error:", error);
+        return res.status(400).json({
+          message: "Failed to extract text from file",
+          error: error.message,
+        });
+      }
+
+      // Step 2: Parse extracted text using Gemini AI
+      let roomsData;
+      try {
+        roomsData = await geminiService.parseRoomDataFromText(extractedText);
+        console.log("Gemini parsed rooms:", roomsData.length);
+      } catch (error) {
+        console.error("Gemini parsing error:", error);
+        return res.status(400).json({
+          message: "Failed to parse room data with AI",
+          error: error.message,
+        });
+      }
+
+      if (!roomsData || roomsData.length === 0) {
+        return res.status(400).json({
+          message: "No valid room data found in the file",
+          extractedText: extractedText.substring(0, 500),
+        });
+      }
+
+      // Step 3: Validate and create rooms
+      const results = {
+        successful: [],
+        failed: [],
+        total: roomsData.length,
+      };
+
+      for (const roomData of roomsData) {
+        try {
+          // Parse duration to check for conflicts
+          const newRange = parseDurationToMinutes(roomData.duration);
+          if (!newRange) {
+            results.failed.push({
+              ...roomData,
+              error: "Invalid duration format",
+            });
+            continue;
+          }
+
+          // Check for time slot conflicts
+          const existingRooms = await Room.find({
+            roomNumber: roomData.roomNumber,
+            day: roomData.day,
+          });
+
+          let hasConflict = false;
+          let conflictDetails = null;
+
+          for (const existingRoom of existingRooms) {
+            const existingRange = parseDurationToMinutes(existingRoom.duration);
+            if (rangesOverlap(newRange, existingRange)) {
+              hasConflict = true;
+              conflictDetails = {
+                existingDuration: existingRoom.duration,
+              };
+              break;
+            }
+          }
+
+          if (hasConflict) {
+            results.failed.push({
+              ...roomData,
+              error: `Time slot conflict with existing booking at ${conflictDetails.existingDuration}`,
+            });
+            continue;
+          }
+
+          // Create the room
+          const room = new Room({
+            roomNumber: roomData.roomNumber,
+            day: roomData.day,
+            duration: roomData.duration,
+            status: roomData.status,
+            authorizedAdmins: [],
+          });
+
+          await room.save();
+
+          // Log room creation activity
+          await ActivityService.logRoomCreated(
+            req.admin._id,
+            roomData.roomNumber,
+            req.admin.username
+          );
+
+          results.successful.push({
+            ...roomData,
+            _id: room._id,
+          });
+        } catch (error) {
+          console.error("Error creating room:", error);
+          results.failed.push({
+            ...roomData,
+            error: error.message || "Unknown error",
+          });
+        }
+      }
+
+      // Return comprehensive results
+      res.status(200).json({
+        message: `Processed ${results.total} rooms: ${results.successful.length} created, ${results.failed.length} failed`,
+        results,
+        extractedText: extractedText.substring(0, 1000), // Include sample of extracted text
+      });
+    } catch (error) {
+      console.error("File upload error:", error);
+      res.status(500).json({
+        message: "File upload and processing failed",
+        error: error.message,
+      });
+    }
+  }
+);
 
 module.exports = router;
