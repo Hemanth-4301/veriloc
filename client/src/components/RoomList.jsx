@@ -168,16 +168,52 @@ const RoomList = ({ rooms = [], showActions = false, onRoomUpdate }) => {
 
   // Convert grouped rooms to array and sort slots by duration
   const groupedRoomsArray = Object.values(groupedRooms).map((group) => {
-    // Sort slots by start time
+    // Define the expected order of time slots
+    const timeSlotOrder = [
+      "9:00-10:00",
+      "10:00-11:00",
+      "11:30-12:30",
+      "12:30-1:30",
+      "2:30-3:30",
+      "3:30-4:30",
+    ];
+
+    // Sort slots by the predefined order
     group.slots.sort((a, b) => {
-      const aStart = a.duration.split("-")[0];
-      const bStart = b.duration.split("-")[0];
-      return aStart.localeCompare(bStart);
+      // Normalize duration strings (handle variations)
+      const normalizeDuration = (dur) => {
+        // Remove spaces and convert to lowercase for comparison
+        return dur.trim().toLowerCase();
+      };
+
+      const aNormalized = normalizeDuration(a.duration);
+      const bNormalized = normalizeDuration(b.duration);
+
+      // Find index in predefined order
+      let aIndex = timeSlotOrder.findIndex(
+        (slot) => normalizeDuration(slot) === aNormalized
+      );
+      let bIndex = timeSlotOrder.findIndex(
+        (slot) => normalizeDuration(slot) === bNormalized
+      );
+
+      // If not found in predefined order, try to parse as time
+      if (aIndex === -1) {
+        const aStart = a.duration.split("-")[0].trim();
+        const [aHours, aMinutes] = aStart.split(":").map(Number);
+        aIndex = aHours * 60 + (aMinutes || 0);
+      }
+
+      if (bIndex === -1) {
+        const bStart = b.duration.split("-")[0].trim();
+        const [bHours, bMinutes] = bStart.split(":").map(Number);
+        bIndex = bHours * 60 + (bMinutes || 0);
+      }
+
+      return aIndex - bIndex;
     });
     return group;
-  });
-
-  // Sort by room number, then by day
+  }); // Sort by room number, then by day
   groupedRoomsArray.sort((a, b) => {
     if (a.roomNumber !== b.roomNumber) {
       return a.roomNumber.localeCompare(b.roomNumber);

@@ -38,6 +38,11 @@ const activitySchema = new mongoose.Schema(
       type: mongoose.Schema.Types.Mixed,
       default: {},
     },
+    source: {
+      type: String,
+      enum: ["hardware", "manual", "system"],
+      default: "manual",
+    },
   },
   {
     timestamps: true,

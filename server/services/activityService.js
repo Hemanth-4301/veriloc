@@ -1,7 +1,14 @@
 const Activity = require("../models/Activity");
 
 class ActivityService {
-  static async logActivity(type, message, adminId = null, roomId = null, metadata = {}) {
+  static async logActivity(
+    type,
+    message,
+    adminId = null,
+    roomId = null,
+    metadata = {},
+    source = "manual"
+  ) {
     try {
       const activity = new Activity({
         type,
@@ -9,6 +16,7 @@ class ActivityService {
         adminId,
         roomId,
         metadata,
+        source,
       });
 
       await activity.save();
@@ -35,19 +43,11 @@ class ActivityService {
   }
 
   static async logAdminLogin(adminId, username) {
-    return this.logActivity(
-      "admin_login",
-      `${username} logged in`,
-      adminId
-    );
+    return this.logActivity("admin_login", `${username} logged in`, adminId);
   }
 
   static async logAdminLogout(adminId, username) {
-    return this.logActivity(
-      "admin_logout", 
-      `${username} logged out`,
-      adminId
-    );
+    return this.logActivity("admin_logout", `${username} logged out`, adminId);
   }
 
   static async logRoomCreated(adminId, roomNumber, adminUsername) {
@@ -80,13 +80,21 @@ class ActivityService {
     );
   }
 
-  static async logRoomStatusChanged(adminId, roomNumber, oldStatus, newStatus, adminUsername) {
+  static async logRoomStatusChanged(
+    adminId,
+    roomNumber,
+    oldStatus,
+    newStatus,
+    adminUsername,
+    source = "manual"
+  ) {
     return this.logActivity(
       "room_status_changed",
       `Room ${roomNumber} status changed from ${oldStatus} to ${newStatus} by ${adminUsername}`,
       adminId,
       null,
-      { roomNumber, oldStatus, newStatus }
+      { roomNumber, oldStatus, newStatus },
+      source
     );
   }
 
@@ -121,13 +129,7 @@ class ActivityService {
   }
 
   static async logSystemActivity(message, metadata = {}) {
-    return this.logActivity(
-      "system",
-      message,
-      null,
-      null,
-      metadata
-    );
+    return this.logActivity("system", message, null, null, metadata);
   }
 }
 

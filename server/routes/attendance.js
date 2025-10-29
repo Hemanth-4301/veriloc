@@ -28,20 +28,14 @@ router.get("/", authenticateToken, async (req, res) => {
       "username email fingerprintID"
     );
 
-    // Get activities for the specified date (room-related activities indicate presence)
+    // Get activities for the specified date (only hardware-initiated room status changes indicate presence)
     const activities = await Activity.find({
       createdAt: {
         $gte: startOfDay,
         $lte: endOfDay,
       },
-      type: {
-        $in: [
-          "room_created",
-          "room_updated",
-          "room_deleted",
-          "room_status_changed",
-        ],
-      },
+      type: "room_status_changed",
+      source: "hardware",
       adminId: { $ne: null },
     })
       .populate("adminId", "username email fingerprintID")
@@ -140,20 +134,14 @@ router.get("/export-pdf", authenticateToken, async (req, res) => {
       "username email fingerprintID"
     );
 
-    // Get activities for the specified date
+    // Get activities for the specified date (only hardware-initiated room status changes)
     const activities = await Activity.find({
       createdAt: {
         $gte: startOfDay,
         $lte: endOfDay,
       },
-      type: {
-        $in: [
-          "room_created",
-          "room_updated",
-          "room_deleted",
-          "room_status_changed",
-        ],
-      },
+      type: "room_status_changed",
+      source: "hardware",
       adminId: { $ne: null },
     })
       .populate("adminId", "username email fingerprintID")

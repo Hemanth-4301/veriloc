@@ -400,11 +400,9 @@ router.post("/make-all-vacant", authenticateToken, async (req, res) => {
     const durationRegex = /^\d{1,2}:\d{2}-\d{1,2}:\d{2}$/;
     const invalidSlots = timeSlots.filter((slot) => !durationRegex.test(slot));
     if (invalidSlots.length > 0) {
-      return res
-        .status(400)
-        .json({
-          message: `Invalid time slot format: ${invalidSlots.join(", ")}`,
-        });
+      return res.status(400).json({
+        message: `Invalid time slot format: ${invalidSlots.join(", ")}`,
+      });
     }
 
     const results = {
@@ -549,13 +547,14 @@ router.post(
       room.timestamp = new Date();
       await room.save();
 
-      // Log room status change activity
+      // Log room status change activity with hardware source
       await ActivityService.logRoomStatusChanged(
         admin._id,
         roomNumber,
         oldStatus,
         status,
-        admin.username
+        admin.username,
+        "hardware"
       );
 
       console.log(
