@@ -733,12 +733,15 @@ router.post(
   async (req, res) => {
     logger.separator();
     logger.log("� UPLOAD ROUTE CALLED");
-    logger.log(`User: ${req.admin?.username || 'unknown'}`);
-    
+    logger.log(`User: ${req.admin?.username || "unknown"}`);
+
     try {
       if (!req.file) {
         logger.log("❌ No file in request");
-        return res.status(400).json({ message: "No file uploaded" });
+        return res.status(400).json({
+          message: "No file uploaded",
+          error: "No file found in the request",
+        });
       }
 
       logger.log("📤 File received:", {
@@ -761,6 +764,7 @@ router.post(
           message:
             "Unsupported file type. Please upload PDF or PNG/JPEG images.",
           supportedTypes: supportedMimeTypes,
+          error: `File type '${req.file.mimetype}' is not supported`,
         });
       }
 
@@ -774,12 +778,17 @@ router.post(
           req.file.buffer,
           req.file.mimetype
         );
-        logger.log(`✅ Gemini returned ${roomsData.length} rooms`);
+        logger.log(
+          `✅ Gemini returned ${roomsData ? roomsData.length : 0} rooms`
+        );
       } catch (error) {
-        logger.error("Gemini parsing failed", error);
+        logger.error("❌ Gemini parsing failed:", error.message);
+        logger.error("Full error:", error);
         return res.status(400).json({
           message: "Failed to parse room data with AI",
           error: error.message,
+          details:
+            "The AI service could not extract room data from the uploaded file. Please ensure the file contains a clear timetable.",
         });
       }
 
@@ -869,7 +878,9 @@ router.post(
         }
       }
 
-      logger.log(`💾 Processing complete: ${results.successful.length} successful, ${results.failed.length} failed`);
+      logger.log(
+        `💾 Processing complete: ${results.successful.length} successful, ${results.failed.length} failed`
+      );
       logger.separator();
 
       // Return comprehensive results

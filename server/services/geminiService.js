@@ -7,12 +7,18 @@ const logger = require("../utils/logger");
 class GeminiService {
   constructor() {
     logger.log("🔧 Initializing GeminiService...");
+
+    if (!process.env.GEMINI_API_KEY) {
+      logger.error("❌ GEMINI_API_KEY not found in environment variables!");
+      throw new Error("GEMINI_API_KEY is not configured");
+    }
+
     this.genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    // Using gemini-1.5-flash for direct file processing
+    // Using gemini-2.5-pro for direct file processing
     this.model = this.genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
+      model: "gemini-2.5-pro",
     });
-    logger.log("✅ GeminiService initialized with model: gemini-1.5-flash");
+    logger.log("✅ GeminiService initialized with model: gemini-2.5-pro");
   }
 
   /**
@@ -26,12 +32,14 @@ class GeminiService {
     logger.log("� parseRoomDataFromFile CALLED");
     logger.log(`📄 File size: ${fileBuffer.length} bytes`);
     logger.log(`📄 MIME type: ${mimetype}`);
-    
+
     try {
       // Convert buffer to base64
       logger.log("🔄 Converting buffer to base64...");
       const base64Data = fileBuffer.toString("base64");
-      logger.log(`✅ Base64 conversion complete: ${base64Data.length} characters`);
+      logger.log(
+        `✅ Base64 conversion complete: ${base64Data.length} characters`
+      );
 
       const prompt = `You are a data extraction specialist. Analyze this timetable document (PDF or image) and extract room/classroom scheduling information.
 
@@ -85,15 +93,33 @@ Example format:
 
       // Create the content parts for Gemini
       logger.log("🤖 Sending request to Gemini API...");
-      const result = await this.model.generateContent([
-        {
-          inlineData: {
-            mimeType: mimetype,
-            data: base64Data,
+
+      let result;
+      try {
+        result = await this.model.generateContent([
+          {
+            inlineData: {
+              mimeType: mimetype,
+              data: base64Data,
+            },
           },
-        },
-        { text: prompt },
-      ]);
+          { text: prompt },
+        ]);
+      } catch (apiError) {
+        logger.error("❌ Gemini API request failed:", apiError.message);
+        if (apiError.message?.includes("API_KEY")) {
+          throw new Error("Invalid or missing Gemini API key");
+        }
+        if (apiError.message?.includes("quota")) {
+          throw new Error("Gemini API quota exceeded. Please try again later.");
+        }
+        if (apiError.message?.includes("RESOURCE_EXHAUSTED")) {
+          throw new Error(
+            "Gemini API rate limit reached. Please try again in a moment."
+          );
+        }
+        throw new Error(`Gemini API error: ${apiError.message}`);
+      }
 
       logger.log("✅ Received response from Gemini API");
       const response = await result.response;
@@ -189,7 +215,9 @@ Example format:
       logger.log("🔍 Starting validation of room entries...");
       const validatedRooms = roomData.filter((room, index) => {
         if (!room.roomNumber || typeof room.roomNumber !== "string") {
-          logger.log(`   ⚠️  Entry ${index + 1}: Missing or invalid room number`);
+          logger.log(
+            `   ⚠️  Entry ${index + 1}: Missing or invalid room number`
+          );
           return false;
         }
         if (!room.day || !validDays.includes(room.day)) {
@@ -200,7 +228,9 @@ Example format:
         // Normalize and validate duration
         const normalizedDuration = normalizeDuration(room.duration);
         if (!normalizedDuration) {
-          logger.log(`   ⚠️  Entry ${index + 1}: Invalid duration "${room.duration}"`);
+          logger.log(
+            `   ⚠️  Entry ${index + 1}: Invalid duration "${room.duration}"`
+          );
           return false;
         }
 
@@ -210,12 +240,18 @@ Example format:
         if (!room.status || !validStatuses.includes(room.status)) {
           room.status = "Occupied"; // Default to Occupied (safer assumption for timetables)
         }
-        
-        logger.log(`   ✅ Entry ${index + 1}: ${room.roomNumber} - ${room.day} - ${room.duration}`);
+
+        logger.log(
+          `   ✅ Entry ${index + 1}: ${room.roomNumber} - ${room.day} - ${
+            room.duration
+          }`
+        );
         return true;
       });
 
-      logger.log(`✅ Validated ${validatedRooms.length} out of ${roomData.length} entries`);
+      logger.log(
+        `✅ Validated ${validatedRooms.length} out of ${roomData.length} entries`
+      );
 
       // Normalize the data
       const normalizedRooms = validatedRooms.map((room) => ({
@@ -225,27 +261,51 @@ Example format:
         status: room.status,
       }));
 
-      logger.log(`🎉 Successfully parsed ${normalizedRooms.length} room entries from file`);
-      
+      logger.log(
+        `🎉 Successfully parsed ${normalizedRooms.length} room entries from file`
+      );
+
       // Log sample of extracted rooms (first 3)
       if (normalizedRooms.length > 0) {
         logger.log("📋 Sample extracted rooms:");
         normalizedRooms.slice(0, 3).forEach((room, idx) => {
-          logger.log(`   ${idx + 1}. ${room.roomNumber} | ${room.day} | ${room.duration} | ${room.status}`);
+          logger.log(
+            `   ${idx + 1}. ${room.roomNumber} | ${room.day} | ${
+              room.duration
+            } | ${room.status}`
+          );
         });
         if (normalizedRooms.length > 3) {
           logger.log(`   ... and ${normalizedRooms.length - 3} more`);
         }
       }
-      
+
       logger.separator();
       return normalizedRooms;
     } catch (error) {
-      logger.error("Error during file parsing", error);
+      logger.error("❌ Error during file parsing:");
+      logger.error(`   Error name: ${error.name}`);
+      logger.error(`   Error message: ${error.message}`);
+      logger.error(`   Stack: ${error.stack}`);
       logger.separator();
-      throw new Error(
-        `Failed to parse room data from file with Gemini: ${error.message}`
-      );
+
+      // Provide more specific error messages
+      if (error.message?.includes("API key")) {
+        throw new Error("Gemini API key is invalid or not configured properly");
+      }
+      if (
+        error.message?.includes("quota") ||
+        error.message?.includes("RESOURCE_EXHAUSTED")
+      ) {
+        throw new Error("Gemini API quota exceeded or rate limit reached");
+      }
+      if (error.message?.includes("JSON")) {
+        throw new Error(
+          "Failed to parse AI response - the file may not contain valid timetable data"
+        );
+      }
+
+      throw new Error(`Failed to parse room data from file: ${error.message}`);
     }
   }
 

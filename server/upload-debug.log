@@ -18,3 +18,325 @@
 [2025-11-03T13:56:43.732Z] ================================================================================
 [2025-11-03T13:56:43.733Z] 🔧 Initializing GeminiService...
 [2025-11-03T13:56:43.734Z] ✅ GeminiService initialized with model: gemini-1.5-flash
+[2025-11-03T14:27:10.149Z] ================================================================================
+[2025-11-03T14:27:10.152Z] Logger initialized at 2025-11-03T14:27:10.152Z
+[2025-11-03T14:27:10.153Z] ================================================================================
+[2025-11-03T14:27:10.154Z] 🔧 Initializing GeminiService...
+[2025-11-03T14:27:10.155Z] ✅ GeminiService initialized with model: gemini-1.5-flash
+--------------------------------------------------------------------------------
+[2025-11-03T14:27:50.446Z] � UPLOAD ROUTE CALLED
+[2025-11-03T14:27:50.447Z] User: Hem-4301
+[2025-11-03T14:27:50.448Z] 📤 File received:
+{
+  "filename": "WhatsApp Image 2025-10-29 at 20.59.21_14383f98.jpg",
+  "mimetype": "image/jpeg",
+  "size": 121187
+}
+[2025-11-03T14:27:50.451Z] ✅ File type validated
+[2025-11-03T14:27:50.452Z] 🤖 Calling geminiService.parseRoomDataFromFile...
+--------------------------------------------------------------------------------
+[2025-11-03T14:27:50.456Z] � parseRoomDataFromFile CALLED
+[2025-11-03T14:27:50.457Z] 📄 File size: 121187 bytes
+[2025-11-03T14:27:50.458Z] 📄 MIME type: image/jpeg
+[2025-11-03T14:27:50.460Z] 🔄 Converting buffer to base64...
+[2025-11-03T14:27:50.462Z] ✅ Base64 conversion complete: 161584 characters
+[2025-11-03T14:27:50.464Z] 🤖 Sending request to Gemini API...
+[2025-11-03T14:27:51.506Z] ❌ ERROR: ❌ Gemini API request failed:
+[GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 Not Found] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2025-11-03T14:27:51.510Z] ❌ ERROR: ❌ Error during file parsing:
+[2025-11-03T14:27:51.511Z] ❌ ERROR:    Error name: Error
+[2025-11-03T14:27:51.511Z] ❌ ERROR:    Error message: Gemini API error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 Not Found] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2025-11-03T14:27:51.516Z] ❌ ERROR:    Stack: Error: Gemini API error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 Not Found] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+    at GeminiService.parseRoomDataFromFile (C:\Users\INTEL\Desktop\my_projects\veriloc\server\services\geminiService.js:117:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async C:\Users\INTEL\Desktop\my_projects\veriloc\server\routes\rooms.js:777:21
+--------------------------------------------------------------------------------
+[2025-11-03T14:27:51.518Z] ❌ ERROR: ❌ Gemini parsing failed:
+Failed to parse room data from file: Gemini API error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 Not Found] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2025-11-03T14:27:51.520Z] ❌ ERROR: Full error:
+Error: Failed to parse room data from file: Gemini API error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 Not Found] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+    at GeminiService.parseRoomDataFromFile (C:\Users\INTEL\Desktop\my_projects\veriloc\server\services\geminiService.js:283:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async C:\Users\INTEL\Desktop\my_projects\veriloc\server\routes\rooms.js:777:21[2025-11-03T14:29:45.152Z] ================================================================================
+[2025-11-03T14:29:45.156Z] Logger initialized at 2025-11-03T14:29:45.156Z
+[2025-11-03T14:29:45.157Z] ================================================================================
+[2025-11-03T14:29:45.158Z] 🔧 Initializing GeminiService...
+[2025-11-03T14:29:45.160Z] ✅ GeminiService initialized with model: gemini-1.5-flash-latest
+--------------------------------------------------------------------------------
+[2025-11-03T14:30:08.613Z] � UPLOAD ROUTE CALLED
+[2025-11-03T14:30:08.614Z] User: Hem-4301
+[2025-11-03T14:30:08.614Z] 📤 File received:
+{
+  "filename": "7 th sem final  20.09.2025.pdf",
+  "mimetype": "application/pdf",
+  "size": 144738
+}
+[2025-11-03T14:30:08.617Z] ✅ File type validated
+[2025-11-03T14:30:08.618Z] 🤖 Calling geminiService.parseRoomDataFromFile...
+--------------------------------------------------------------------------------
+[2025-11-03T14:30:08.622Z] � parseRoomDataFromFile CALLED
+[2025-11-03T14:30:08.623Z] 📄 File size: 144738 bytes
+[2025-11-03T14:30:08.625Z] 📄 MIME type: application/pdf
+[2025-11-03T14:30:08.626Z] 🔄 Converting buffer to base64...
+[2025-11-03T14:30:08.629Z] ✅ Base64 conversion complete: 192984 characters
+[2025-11-03T14:30:08.629Z] 🤖 Sending request to Gemini API...
+[2025-11-03T14:30:09.662Z] ❌ ERROR: ❌ Gemini API request failed:
+[GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent: [404 Not Found] models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2025-11-03T14:30:09.664Z] ❌ ERROR: ❌ Error during file parsing:
+[2025-11-03T14:30:09.668Z] ❌ ERROR:    Error name: Error
+[2025-11-03T14:30:09.671Z] ❌ ERROR:    Error message: Gemini API error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent: [404 Not Found] models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2025-11-03T14:30:09.672Z] ❌ ERROR:    Stack: Error: Gemini API error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent: [404 Not Found] models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+    at GeminiService.parseRoomDataFromFile (C:\Users\INTEL\Desktop\my_projects\veriloc\server\services\geminiService.js:117:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async C:\Users\INTEL\Desktop\my_projects\veriloc\server\routes\rooms.js:777:21
+--------------------------------------------------------------------------------
+[2025-11-03T14:30:09.675Z] ❌ ERROR: ❌ Gemini parsing failed:
+Failed to parse room data from file: Gemini API error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent: [404 Not Found] models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2025-11-03T14:30:09.689Z] ❌ ERROR: Full error:
+Error: Failed to parse room data from file: Gemini API error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent: [404 Not Found] models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+    at GeminiService.parseRoomDataFromFile (C:\Users\INTEL\Desktop\my_projects\veriloc\server\services\geminiService.js:283:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async C:\Users\INTEL\Desktop\my_projects\veriloc\server\routes\rooms.js:777:21--------------------------------------------------------------------------------
+[2025-11-03T14:31:08.664Z] � UPLOAD ROUTE CALLED
+[2025-11-03T14:31:08.665Z] User: Hem-4301
+[2025-11-03T14:31:08.666Z] 📤 File received:
+{
+  "filename": "7 th sem final  20.09.2025.pdf",
+  "mimetype": "application/pdf",
+  "size": 144738
+}
+[2025-11-03T14:31:08.668Z] ✅ File type validated
+[2025-11-03T14:31:08.669Z] 🤖 Calling geminiService.parseRoomDataFromFile...
+--------------------------------------------------------------------------------
+[2025-11-03T14:31:08.671Z] � parseRoomDataFromFile CALLED
+[2025-11-03T14:31:08.672Z] 📄 File size: 144738 bytes
+[2025-11-03T14:31:08.674Z] 📄 MIME type: application/pdf
+[2025-11-03T14:31:08.675Z] 🔄 Converting buffer to base64...
+[2025-11-03T14:31:08.677Z] ✅ Base64 conversion complete: 192984 characters
+[2025-11-03T14:31:08.678Z] 🤖 Sending request to Gemini API...
+[2025-11-03T14:31:10.125Z] ❌ ERROR: ❌ Gemini API request failed:
+[GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent: [404 Not Found] models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2025-11-03T14:31:10.127Z] ❌ ERROR: ❌ Error during file parsing:
+[2025-11-03T14:31:10.127Z] ❌ ERROR:    Error name: Error
+[2025-11-03T14:31:10.131Z] ❌ ERROR:    Error message: Gemini API error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent: [404 Not Found] models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2025-11-03T14:31:10.133Z] ❌ ERROR:    Stack: Error: Gemini API error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent: [404 Not Found] models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+    at GeminiService.parseRoomDataFromFile (C:\Users\INTEL\Desktop\my_projects\veriloc\server\services\geminiService.js:117:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async C:\Users\INTEL\Desktop\my_projects\veriloc\server\routes\rooms.js:777:21
+--------------------------------------------------------------------------------
+[2025-11-03T14:31:10.147Z] ❌ ERROR: ❌ Gemini parsing failed:
+Failed to parse room data from file: Gemini API error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent: [404 Not Found] models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2025-11-03T14:31:10.151Z] ❌ ERROR: Full error:
+Error: Failed to parse room data from file: Gemini API error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent: [404 Not Found] models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+    at GeminiService.parseRoomDataFromFile (C:\Users\INTEL\Desktop\my_projects\veriloc\server\services\geminiService.js:283:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async C:\Users\INTEL\Desktop\my_projects\veriloc\server\routes\rooms.js:777:21[2025-11-03T14:32:07.471Z] ================================================================================
+[2025-11-03T14:32:07.474Z] Logger initialized at 2025-11-03T14:32:07.474Z
+[2025-11-03T14:32:07.475Z] ================================================================================
+[2025-11-03T14:32:07.476Z] 🔧 Initializing GeminiService...
+[2025-11-03T14:32:07.477Z] ✅ GeminiService initialized with model: gemini-1.5-flash-002
+--------------------------------------------------------------------------------
+[2025-11-03T14:32:11.610Z] � UPLOAD ROUTE CALLED
+[2025-11-03T14:32:11.611Z] User: Hem-4301
+[2025-11-03T14:32:11.613Z] 📤 File received:
+{
+  "filename": "7 th sem final  20.09.2025.pdf",
+  "mimetype": "application/pdf",
+  "size": 144738
+}
+[2025-11-03T14:32:11.617Z] ✅ File type validated
+[2025-11-03T14:32:11.618Z] 🤖 Calling geminiService.parseRoomDataFromFile...
+--------------------------------------------------------------------------------
+[2025-11-03T14:32:11.620Z] � parseRoomDataFromFile CALLED
+[2025-11-03T14:32:11.623Z] 📄 File size: 144738 bytes
+[2025-11-03T14:32:11.624Z] 📄 MIME type: application/pdf
+[2025-11-03T14:32:11.625Z] 🔄 Converting buffer to base64...
+[2025-11-03T14:32:11.627Z] ✅ Base64 conversion complete: 192984 characters
+[2025-11-03T14:32:11.628Z] 🤖 Sending request to Gemini API...
+[2025-11-03T14:32:12.660Z] ❌ ERROR: ❌ Gemini API request failed:
+[GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-002:generateContent: [404 Not Found] models/gemini-1.5-flash-002 is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2025-11-03T14:32:12.666Z] ❌ ERROR: ❌ Error during file parsing:
+[2025-11-03T14:32:12.668Z] ❌ ERROR:    Error name: Error
+[2025-11-03T14:32:12.671Z] ❌ ERROR:    Error message: Gemini API error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-002:generateContent: [404 Not Found] models/gemini-1.5-flash-002 is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2025-11-03T14:32:12.673Z] ❌ ERROR:    Stack: Error: Gemini API error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-002:generateContent: [404 Not Found] models/gemini-1.5-flash-002 is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+    at GeminiService.parseRoomDataFromFile (C:\Users\INTEL\Desktop\my_projects\veriloc\server\services\geminiService.js:117:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async C:\Users\INTEL\Desktop\my_projects\veriloc\server\routes\rooms.js:777:21
+--------------------------------------------------------------------------------
+[2025-11-03T14:32:12.689Z] ❌ ERROR: ❌ Gemini parsing failed:
+Failed to parse room data from file: Gemini API error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-002:generateContent: [404 Not Found] models/gemini-1.5-flash-002 is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+[2025-11-03T14:32:12.694Z] ❌ ERROR: Full error:
+Error: Failed to parse room data from file: Gemini API error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-002:generateContent: [404 Not Found] models/gemini-1.5-flash-002 is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+    at GeminiService.parseRoomDataFromFile (C:\Users\INTEL\Desktop\my_projects\veriloc\server\services\geminiService.js:283:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async C:\Users\INTEL\Desktop\my_projects\veriloc\server\routes\rooms.js:777:21[2025-11-03T14:33:41.330Z] ================================================================================
+[2025-11-03T14:33:41.335Z] Logger initialized at 2025-11-03T14:33:41.335Z
+[2025-11-03T14:33:41.336Z] ================================================================================
+[2025-11-03T14:33:41.337Z] 🔧 Initializing GeminiService...
+[2025-11-03T14:33:41.338Z] ✅ GeminiService initialized with model: gemini-1.5-flash-002
+--------------------------------------------------------------------------------
+[2025-11-03T14:33:49.539Z] � UPLOAD ROUTE CALLED
+[2025-11-03T14:33:49.540Z] User: Hem-4301
+[2025-11-03T14:33:49.541Z] 📤 File received:
+{
+  "filename": "7 th sem final  20.09.2025.pdf",
+  "mimetype": "application/pdf",
+  "size": 144738
+}
+[2025-11-03T14:33:49.543Z] ✅ File type validated
+[2025-11-03T14:33:49.544Z] 🤖 Calling geminiService.parseRoomDataFromFile...
+--------------------------------------------------------------------------------
+[2025-11-03T14:33:49.548Z] � parseRoomDataFromFile CALLED
+[2025-11-03T14:33:49.549Z] 📄 File size: 144738 bytes
+[2025-11-03T14:33:49.550Z] 📄 MIME type: application/pdf
+[2025-11-03T14:33:49.551Z] 🔄 Converting buffer to base64...
+[2025-11-03T14:33:49.553Z] ✅ Base64 conversion complete: 192984 characters
+[2025-11-03T14:33:49.554Z] 🤖 Sending request to Gemini API...
+[2025-11-03T14:36:06.427Z] ================================================================================
+[2025-11-03T14:36:06.437Z] Logger initialized at 2025-11-03T14:36:06.437Z
+[2025-11-03T14:36:06.438Z] ================================================================================
+[2025-11-03T14:36:06.439Z] 🔧 Initializing GeminiService...
+[2025-11-03T14:36:06.440Z] ✅ GeminiService initialized with model: gemini-1.5-flash-002
+[2025-11-03T14:36:14.355Z] ✅ Received response from Gemini API
+[2025-11-03T14:36:14.359Z] 📝 Response length: 4382 characters
+[2025-11-03T14:36:14.360Z] 📝 Response preview: ```json
+[
+  {
+    "roomNumber": "304",
+    "day": "Monday",
+    "duration": "9:00-10:00",
+    "status": "Occupied"
+  },
+  {
+    "roomNumber": "304",
+    "day": "Monday",
+    "duration": "10:00-11:00",...
+[2025-11-03T14:36:14.362Z] 🧹 Removed JSON markdown blocks
+[2025-11-03T14:36:14.363Z] 🔍 Parsing JSON response...
+[2025-11-03T14:36:14.364Z] ✅ Parsed 39 raw room entries
+[2025-11-03T14:36:14.367Z] 🔍 Starting validation of room entries...
+[2025-11-03T14:36:14.368Z]    ✅ Entry 1: 304 - Monday - 9:00-10:00
+[2025-11-03T14:36:14.369Z]    ✅ Entry 2: 304 - Monday - 10:00-11:00
+[2025-11-03T14:36:14.371Z]    ✅ Entry 3: 304 - Monday - 11:30-12:30
+[2025-11-03T14:36:14.375Z]    ✅ Entry 4: 304 - Tuesday - 9:00-10:00
+[2025-11-03T14:36:14.376Z]    ✅ Entry 5: 304 - Tuesday - 10:00-11:00
+[2025-11-03T14:36:14.379Z]    ✅ Entry 6: 304 - Tuesday - 11:30-12:30
+[2025-11-03T14:36:14.380Z]    ✅ Entry 7: 304 - Tuesday - 12:30-1:30
+[2025-11-03T14:36:14.381Z]    ✅ Entry 8: 304 - Tuesday - 2:30-3:30
+[2025-11-03T14:36:14.382Z]    ✅ Entry 9: 304 - Wednesday - 9:00-10:00
+[2025-11-03T14:36:14.383Z]    ✅ Entry 10: 304 - Wednesday - 10:00-11:00
+[2025-11-03T14:36:14.383Z]    ✅ Entry 11: 304 - Wednesday - 11:30-12:30
+[2025-11-03T14:36:14.385Z]    ✅ Entry 12: 304 - Wednesday - 12:30-1:30
+[2025-11-03T14:36:14.387Z]    ✅ Entry 13: 304 - Thursday - 9:00-10:00
+[2025-11-03T14:36:14.389Z]    ✅ Entry 14: 304 - Thursday - 10:00-11:00
+[2025-11-03T14:36:14.392Z]    ✅ Entry 15: 304 - Thursday - 11:30-12:30
+[2025-11-03T14:36:14.395Z]    ✅ Entry 16: 304 - Friday - 11:30-12:30
+[2025-11-03T14:36:14.396Z]    ✅ Entry 17: 305 - Monday - 10:00-11:00
+[2025-11-03T14:36:14.397Z]    ✅ Entry 18: 304 - Monday - 11:30-12:30
+[2025-11-03T14:36:14.399Z]    ✅ Entry 19: 310 - Tuesday - 2:30-3:30
+[2025-11-03T14:36:14.401Z]    ✅ Entry 20: 310 - Tuesday - 3:30-4:30
+[2025-11-03T14:36:14.401Z]    ✅ Entry 21: 309 - Wednesday - 11:30-12:30
+[2025-11-03T14:36:14.402Z]    ✅ Entry 22: 309 - Wednesday - 12:30-1:30
+[2025-11-03T14:36:14.403Z]    ✅ Entry 23: 305 - Thursday - 9:00-10:00
+[2025-11-03T14:36:14.404Z]    ✅ Entry 24: 310 - Monday - 9:00-10:00
+[2025-11-03T14:36:14.406Z]    ✅ Entry 25: 309 - Monday - 10:00-11:00
+[2025-11-03T14:36:14.408Z]    ✅ Entry 26: 309 - Monday - 11:30-12:30
+[2025-11-03T14:36:14.410Z]    ✅ Entry 27: 310 - Tuesday - 9:00-10:00
+[2025-11-03T14:36:14.412Z]    ✅ Entry 28: 310 - Tuesday - 10:00-11:00
+[2025-11-03T14:36:14.413Z]    ✅ Entry 29: 309 - Tuesday - 11:30-12:30
+[2025-11-03T14:36:14.414Z]    ✅ Entry 30: 309 - Tuesday - 12:30-1:30
+[2025-11-03T14:36:14.415Z]    ✅ Entry 31: 310 - Wednesday - 9:00-10:00
+[2025-11-03T14:36:14.416Z]    ✅ Entry 32: 310 - Wednesday - 10:00-11:00
+[2025-11-03T14:36:14.417Z]    ✅ Entry 33: 310 - Wednesday - 2:30-3:30
+[2025-11-03T14:36:14.417Z]    ✅ Entry 34: 310 - Thursday - 10:00-11:00
+[2025-11-03T14:36:14.418Z]    ✅ Entry 35: 309 - Thursday - 11:30-12:30
+[2025-11-03T14:36:14.419Z]    ✅ Entry 36: 309 - Thursday - 12:30-1:30
+[2025-11-03T14:36:14.420Z]    ✅ Entry 37: 310 - Thursday - 3:30-4:30
+[2025-11-03T14:36:14.421Z]    ✅ Entry 38: CSLAB 3 - Tuesday - 2:30-3:30
+[2025-11-03T14:36:14.422Z]    ✅ Entry 39: CSLAB 3 - Wednesday - 2:30-3:30
+[2025-11-03T14:36:14.423Z] ✅ Validated 39 out of 39 entries
+[2025-11-03T14:36:14.424Z] 🎉 Successfully parsed 39 room entries from file
+[2025-11-03T14:36:14.428Z] 📋 Sample extracted rooms:
+[2025-11-03T14:36:14.430Z]    1. 304 | Monday | 9:00-10:00 | Occupied
+[2025-11-03T14:36:14.431Z]    2. 304 | Monday | 10:00-11:00 | Occupied
+[2025-11-03T14:36:14.432Z]    3. 304 | Monday | 11:30-12:30 | Occupied
+[2025-11-03T14:36:14.434Z]    ... and 36 more
+--------------------------------------------------------------------------------
+[2025-11-03T14:36:14.436Z] ✅ Gemini returned 39 rooms
+[2025-11-03T14:36:29.716Z] 💾 Processing complete: 38 successful, 1 failed
+--------------------------------------------------------------------------------
+[2025-11-03T14:37:30.149Z] ================================================================================
+[2025-11-03T14:37:30.152Z] Logger initialized at 2025-11-03T14:37:30.152Z
+[2025-11-03T14:37:30.153Z] ================================================================================
+[2025-11-03T14:37:30.154Z] 🔧 Initializing GeminiService...
+[2025-11-03T14:37:30.155Z] ✅ GeminiService initialized with model: gemini-1.5-flash-002
+--------------------------------------------------------------------------------
+[2025-11-03T14:37:41.730Z] � UPLOAD ROUTE CALLED
+[2025-11-03T14:37:41.732Z] User: Hem-4301
+[2025-11-03T14:37:41.733Z] 📤 File received:
+{
+  "filename": "WhatsApp Image 2025-10-29 at 20.59.21_14383f98.jpg",
+  "mimetype": "image/jpeg",
+  "size": 121187
+}
+[2025-11-03T14:37:41.736Z] ✅ File type validated
+[2025-11-03T14:37:41.739Z] 🤖 Calling geminiService.parseRoomDataFromFile...
+--------------------------------------------------------------------------------
+[2025-11-03T14:37:41.743Z] � parseRoomDataFromFile CALLED
+[2025-11-03T14:37:41.745Z] 📄 File size: 121187 bytes
+[2025-11-03T14:37:41.747Z] 📄 MIME type: image/jpeg
+[2025-11-03T14:37:41.750Z] 🔄 Converting buffer to base64...
+[2025-11-03T14:37:41.752Z] ✅ Base64 conversion complete: 161584 characters
+[2025-11-03T14:37:41.753Z] 🤖 Sending request to Gemini API...
+[2025-11-03T14:38:37.439Z] ✅ Received response from Gemini API
+[2025-11-03T14:38:37.441Z] 📝 Response length: 2043 characters
+[2025-11-03T14:38:37.442Z] 📝 Response preview: ```json
+[
+  {
+    "roomNumber": "305",
+    "day": "Monday",
+    "duration": "10:00-11:00",
+    "status": "Occupied"
+  },
+  {
+    "roomNumber": "304",
+    "day": "Monday",
+    "duration": "11:30-12:30"...
+[2025-11-03T14:38:37.457Z] 🧹 Removed JSON markdown blocks
+[2025-11-03T14:38:37.460Z] 🔍 Parsing JSON response...
+[2025-11-03T14:38:37.462Z] ✅ Parsed 18 raw room entries
+[2025-11-03T14:38:37.464Z] 🔍 Starting validation of room entries...
+[2025-11-03T14:38:37.476Z]    ✅ Entry 1: 305 - Monday - 10:00-11:00
+[2025-11-03T14:38:37.477Z]    ✅ Entry 2: 304 - Monday - 11:30-12:30
+[2025-11-03T14:38:37.479Z]    ✅ Entry 3: 304 - Monday - 12:30-1:30
+[2025-11-03T14:38:37.481Z]    ✅ Entry 4: 304 - Tuesday - 10:00-11:00
+[2025-11-03T14:38:37.497Z]    ✅ Entry 5: 305 - Tuesday - 10:00-11:00
+[2025-11-03T14:38:37.509Z]    ✅ Entry 6: CSLAB5 - Tuesday - 11:30-12:30
+[2025-11-03T14:38:37.511Z]    ✅ Entry 7: CSLAB5 - Tuesday - 12:30-1:30
+[2025-11-03T14:38:37.513Z]    ✅ Entry 8: 310 - Tuesday - 2:30-3:30
+[2025-11-03T14:38:37.514Z]    ✅ Entry 9: 310 - Tuesday - 3:30-4:30
+[2025-11-03T14:38:37.518Z]    ✅ Entry 10: 304 - Wednesday - 10:00-11:00
+[2025-11-03T14:38:37.525Z]    ✅ Entry 11: 305 - Wednesday - 10:00-11:00
+[2025-11-03T14:38:37.527Z]    ✅ Entry 12: 309 - Wednesday - 11:30-12:30
+[2025-11-03T14:38:37.529Z]    ✅ Entry 13: 309 - Wednesday - 12:30-1:30
+[2025-11-03T14:38:37.531Z]    ✅ Entry 14: 305 - Thursday - 9:00-10:00
+[2025-11-03T14:38:37.538Z]    ✅ Entry 15: 304 - Thursday - 10:00-11:00
+[2025-11-03T14:38:37.545Z]    ✅ Entry 16: 305 - Thursday - 10:00-11:00
+[2025-11-03T14:38:37.547Z]    ✅ Entry 17: CSLAB5 - Thursday - 11:30-12:30
+[2025-11-03T14:38:37.548Z]    ✅ Entry 18: CSLAB5 - Thursday - 12:30-1:30
+[2025-11-03T14:38:37.556Z] ✅ Validated 18 out of 18 entries
+[2025-11-03T14:38:37.558Z] 🎉 Successfully parsed 18 room entries from file
+[2025-11-03T14:38:37.559Z] 📋 Sample extracted rooms:
+[2025-11-03T14:38:37.560Z]    1. 305 | Monday | 10:00-11:00 | Occupied
+[2025-11-03T14:38:37.561Z]    2. 304 | Monday | 11:30-12:30 | Occupied
+[2025-11-03T14:38:37.562Z]    3. 304 | Monday | 12:30-1:30 | Occupied
+[2025-11-03T14:38:37.567Z]    ... and 15 more
+--------------------------------------------------------------------------------
+[2025-11-03T14:38:37.576Z] ✅ Gemini returned 18 rooms
+[2025-11-03T14:38:42.907Z] 💾 Processing complete: 18 successful, 0 failed
+--------------------------------------------------------------------------------
+[2025-11-03T14:40:42.128Z] ================================================================================
+[2025-11-03T14:40:42.135Z] Logger initialized at 2025-11-03T14:40:42.135Z
+[2025-11-03T14:40:42.136Z] ================================================================================
+[2025-11-03T14:40:42.137Z] 🔧 Initializing GeminiService...
+[2025-11-03T14:40:42.138Z] ✅ GeminiService initialized with model: gemini-2.5-pro

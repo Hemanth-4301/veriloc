@@ -347,9 +347,16 @@ const RoomForm = ({ onRoomCreated }) => {
       }
     } catch (error) {
       console.error("File upload error:", error);
+      console.error("Error response data:", error.response?.data);
       const errorMessage =
         error.response?.data?.message || "Failed to upload and process file";
-      toast.error(errorMessage, { duration: 6000 });
+      const errorDetails = error.response?.data?.error;
+
+      if (errorDetails) {
+        toast.error(`${errorMessage}: ${errorDetails}`, { duration: 6000 });
+      } else {
+        toast.error(errorMessage, { duration: 6000 });
+      }
     } finally {
       setLoading(false);
     }
