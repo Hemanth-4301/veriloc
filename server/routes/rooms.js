@@ -5,8 +5,8 @@ const Admin = require("../models/Admin");
 const ActivityService = require("../services/activityService");
 const { authenticateToken } = require("../middleware/auth");
 const upload = require("../middleware/upload");
-const textExtractionService = require("../services/textExtractionService");
 const geminiService = require("../services/geminiService");
+const logger = require("../utils/logger");
 
 const router = express.Router();
 
@@ -497,6 +497,48 @@ router.delete("/:id", authenticateToken, async (req, res) => {
   }
 });
 
+// Helper function to get current time slot based on current time
+function getCurrentTimeSlot() {
+  const now = new Date();
+  const hours = now.getHours();
+  const minutes = now.getMinutes();
+  const currentMinutes = hours * 60 + minutes;
+
+  // Define time slots with their ranges
+  const timeSlots = [
+    { duration: "9:00-10:00", start: 9 * 60, end: 10 * 60 },
+    { duration: "10:00-11:00", start: 10 * 60, end: 11 * 60 },
+    { duration: "11:30-12:30", start: 11 * 60 + 30, end: 12 * 60 + 30 },
+    { duration: "12:30-1:30", start: 12 * 60 + 30, end: 13 * 60 + 30 },
+    { duration: "2:30-3:30", start: 14 * 60 + 30, end: 15 * 60 + 30 },
+    { duration: "3:30-4:30", start: 15 * 60 + 30, end: 16 * 60 + 30 },
+  ];
+
+  // Find the time slot that contains the current time
+  for (const slot of timeSlots) {
+    if (currentMinutes >= slot.start && currentMinutes < slot.end) {
+      return slot.duration;
+    }
+  }
+
+  return null; // Current time doesn't fall in any defined slot
+}
+
+// Helper function to get current day name
+function getCurrentDay() {
+  const days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  const now = new Date();
+  return days[now.getDay()];
+}
+
 // POST /api/rooms/update - Update room status from hardware (IoT)
 router.post(
   "/update",
@@ -530,13 +572,41 @@ router.post(
         return res.status(403).json({ message: "Unauthorized fingerprint ID" });
       }
 
-      // Find room by room number
-      const room = await Room.findOne({ roomNumber });
+      // Get current day and time slot
+      const currentDay = getCurrentDay();
+      const currentTimeSlot = getCurrentTimeSlot();
+
+      if (!currentTimeSlot) {
+        console.log(
+          `Hardware update attempt outside defined time slots (current time doesn't match any slot)`
+        );
+        return res.status(400).json({
+          message: "Current time does not fall within any defined time slot",
+          currentTime: new Date().toLocaleTimeString(),
+        });
+      }
+
+      console.log(
+        `Hardware update request: Room ${roomNumber}, Day: ${currentDay}, Time slot: ${currentTimeSlot}`
+      );
+
+      // Find room by room number, current day, and current time slot
+      const room = await Room.findOne({
+        roomNumber,
+        day: currentDay,
+        duration: currentTimeSlot,
+      });
+
       if (!room) {
         console.log(
-          `Hardware update attempt for non-existent room: ${roomNumber}`
+          `Hardware update attempt for non-existent room configuration: ${roomNumber}, ${currentDay}, ${currentTimeSlot}`
         );
-        return res.status(404).json({ message: "Room not found" });
+        return res.status(404).json({
+          message: `Room ${roomNumber} not found for ${currentDay} at ${currentTimeSlot}`,
+          roomNumber,
+          day: currentDay,
+          timeSlot: currentTimeSlot,
+        });
       }
 
       // Store old status for activity logging
@@ -558,13 +628,15 @@ router.post(
       );
 
       console.log(
-        `Room ${roomNumber} status updated to ${status} by admin ${admin.username} (${fingerprintID})`
+        `Room ${roomNumber} (${currentDay}, ${currentTimeSlot}) status updated to ${status} by admin ${admin.username} (${fingerprintID})`
       );
 
       res.json({
         message: "Room status updated successfully",
         room: {
           roomNumber: room.roomNumber,
+          day: currentDay,
+          duration: currentTimeSlot,
           status: room.status,
           timestamp: room.timestamp,
         },
@@ -659,43 +731,52 @@ router.post(
   authenticateToken,
   upload.single("file"),
   async (req, res) => {
+    logger.separator();
+    logger.log("� UPLOAD ROUTE CALLED");
+    logger.log(`User: ${req.admin?.username || 'unknown'}`);
+    
     try {
       if (!req.file) {
+        logger.log("❌ No file in request");
         return res.status(400).json({ message: "No file uploaded" });
       }
 
-      console.log("File upload received:", {
+      logger.log("📤 File received:", {
         filename: req.file.originalname,
         mimetype: req.file.mimetype,
         size: req.file.size,
       });
 
-      // Step 1: Extract text from the uploaded file
-      let extractedText;
-      try {
-        extractedText = await textExtractionService.extractText(
-          req.file.buffer,
-          req.file.mimetype
-        );
-        console.log(
-          "Text extracted successfully:",
-          extractedText.substring(0, 200) + "..."
-        );
-      } catch (error) {
-        console.error("Text extraction error:", error);
+      // Validate file type - only support PDF and images
+      const supportedMimeTypes = [
+        "application/pdf",
+        "image/png",
+        "image/jpeg",
+        "image/jpg",
+      ];
+
+      if (!supportedMimeTypes.includes(req.file.mimetype)) {
+        logger.log("❌ Unsupported file type:", req.file.mimetype);
         return res.status(400).json({
-          message: "Failed to extract text from file",
-          error: error.message,
+          message:
+            "Unsupported file type. Please upload PDF or PNG/JPEG images.",
+          supportedTypes: supportedMimeTypes,
         });
       }
 
-      // Step 2: Parse extracted text using Gemini AI
+      logger.log("✅ File type validated");
+
+      // Parse file directly using Gemini 1.5 Flash (no intermediate text extraction)
       let roomsData;
       try {
-        roomsData = await geminiService.parseRoomDataFromText(extractedText);
-        console.log("Gemini parsed rooms:", roomsData.length);
+        logger.log("🤖 Calling geminiService.parseRoomDataFromFile...");
+        roomsData = await geminiService.parseRoomDataFromFile(
+          req.file.buffer,
+          req.file.mimetype
+        );
+        logger.log(`✅ Gemini returned ${roomsData.length} rooms`);
       } catch (error) {
-        console.error("Gemini parsing error:", error);
+        logger.error("Gemini parsing failed", error);
         return res.status(400).json({
           message: "Failed to parse room data with AI",
           error: error.message,
@@ -703,13 +784,14 @@ router.post(
       }
 
       if (!roomsData || roomsData.length === 0) {
+        logger.log("⚠️  No valid room data found");
         return res.status(400).json({
-          message: "No valid room data found in the file",
-          extractedText: extractedText.substring(0, 500),
+          message:
+            "No valid room data found in the file. Please ensure the file contains a timetable with room numbers, days, and time slots.",
         });
       }
 
-      // Step 3: Validate and create rooms
+      // Validate and create rooms
       const results = {
         successful: [],
         failed: [],
@@ -787,14 +869,17 @@ router.post(
         }
       }
 
+      logger.log(`💾 Processing complete: ${results.successful.length} successful, ${results.failed.length} failed`);
+      logger.separator();
+
       // Return comprehensive results
       res.status(200).json({
         message: `Processed ${results.total} rooms: ${results.successful.length} created, ${results.failed.length} failed`,
         results,
-        extractedText: extractedText.substring(0, 1000), // Include sample of extracted text
       });
     } catch (error) {
-      console.error("File upload error:", error);
+      logger.error("Fatal error during upload", error);
+      logger.separator();
       res.status(500).json({
         message: "File upload and processing failed",
         error: error.message,
