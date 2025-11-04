@@ -340,3 +340,8 @@ Error: Failed to parse room data from file: Gemini API error: [GoogleGenerativeA
 [2025-11-03T14:40:42.136Z] ================================================================================
 [2025-11-03T14:40:42.137Z] 🔧 Initializing GeminiService...
 [2025-11-03T14:40:42.138Z] ✅ GeminiService initialized with model: gemini-2.5-pro
+[2025-11-04T06:26:23.261Z] ================================================================================
+[2025-11-04T06:26:23.264Z] Logger initialized at 2025-11-04T06:26:23.264Z
+[2025-11-04T06:26:23.265Z] ================================================================================
+[2025-11-04T06:26:23.267Z] 🔧 Initializing GeminiService...
+[2025-11-04T06:26:23.268Z] ✅ GeminiService initialized with model: gemini-2.5-pro

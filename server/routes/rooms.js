@@ -497,11 +497,16 @@ router.delete("/:id", authenticateToken, async (req, res) => {
   }
 });
 
-// Helper function to get current time slot based on current time
+// Helper function to get current time slot based on current time (IST)
 function getCurrentTimeSlot() {
+  // Get current time in IST (UTC+5:30)
   const now = new Date();
-  const hours = now.getHours();
-  const minutes = now.getMinutes();
+  const utcTime = now.getTime();
+  const istOffset = 5.5 * 60 * 60 * 1000; // IST is UTC+5:30
+  const istTime = new Date(utcTime + istOffset);
+
+  const hours = istTime.getUTCHours();
+  const minutes = istTime.getUTCMinutes();
   const currentMinutes = hours * 60 + minutes;
 
   // Define time slots with their ranges
@@ -524,7 +529,7 @@ function getCurrentTimeSlot() {
   return null; // Current time doesn't fall in any defined slot
 }
 
-// Helper function to get current day name
+// Helper function to get current day name (IST)
 function getCurrentDay() {
   const days = [
     "Sunday",
@@ -535,8 +540,14 @@ function getCurrentDay() {
     "Friday",
     "Saturday",
   ];
+
+  // Get current time in IST (UTC+5:30)
   const now = new Date();
-  return days[now.getDay()];
+  const utcTime = now.getTime();
+  const istOffset = 5.5 * 60 * 60 * 1000; // IST is UTC+5:30
+  const istTime = new Date(utcTime + istOffset);
+
+  return days[istTime.getUTCDay()];
 }
 
 // POST /api/rooms/update - Update room status from hardware (IoT)
@@ -577,12 +588,32 @@ router.post(
       const currentTimeSlot = getCurrentTimeSlot();
 
       if (!currentTimeSlot) {
+        // Get IST time for display
+        const now = new Date();
+        const utcTime = now.getTime();
+        const istOffset = 5.5 * 60 * 60 * 1000;
+        const istTime = new Date(utcTime + istOffset);
+
+        const hours = String(istTime.getUTCHours()).padStart(2, "0");
+        const minutes = String(istTime.getUTCMinutes()).padStart(2, "0");
+        const currentTime = `${hours}:${minutes}`;
+
         console.log(
-          `Hardware update attempt outside defined time slots (current time doesn't match any slot)`
+          `Hardware update attempt outside defined time slots (IST time: ${currentTime})`
         );
+
         return res.status(400).json({
-          message: "Current time does not fall within any defined time slot",
-          currentTime: new Date().toLocaleTimeString(),
+          message: `Current time (${currentTime} IST) is outside defined time slots`,
+          currentTime: currentTime,
+          timezone: "IST (UTC+5:30)",
+          validSlots: [
+            "9:00-10:00",
+            "10:00-11:00",
+            "11:30-12:30",
+            "12:30-1:30",
+            "2:30-3:30",
+            "3:30-4:30",
+          ],
         });
       }
 
@@ -601,12 +632,27 @@ router.post(
         console.log(
           `Hardware update attempt for non-existent room configuration: ${roomNumber}, ${currentDay}, ${currentTimeSlot}`
         );
-        return res.status(404).json({
-          message: `Room ${roomNumber} not found for ${currentDay} at ${currentTimeSlot}`,
-          roomNumber,
-          day: currentDay,
-          timeSlot: currentTimeSlot,
-        });
+
+        // Check if room exists for this room number at all
+        const anyRoomEntry = await Room.findOne({ roomNumber });
+
+        if (!anyRoomEntry) {
+          return res.status(404).json({
+            message: `Room ${roomNumber} does not exist in the system. Please create room entries first.`,
+            roomNumber,
+            day: currentDay,
+            timeSlot: currentTimeSlot,
+            hint: "Create room entries in the admin dashboard for all days and time slots",
+          });
+        } else {
+          return res.status(404).json({
+            message: `Room ${roomNumber} exists but has no entry for ${currentDay} at ${currentTimeSlot}`,
+            roomNumber,
+            day: currentDay,
+            timeSlot: currentTimeSlot,
+            hint: `Create a room entry for Room ${roomNumber} on ${currentDay} during ${currentTimeSlot}`,
+          });
+        }
       }
 
       // Store old status for activity logging
