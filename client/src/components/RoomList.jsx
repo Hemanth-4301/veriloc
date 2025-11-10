@@ -280,23 +280,25 @@ const RoomList = ({ rooms = [], showActions = false, onRoomUpdate }) => {
       </div>
 
       {/* Rooms Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4 lg:gap-5">
         {paginatedRooms.map((roomGroup, groupIndex) => (
           <div
             key={`${roomGroup.roomNumber}-${roomGroup.day}-${groupIndex}`}
-            className="card p-4 sm:p-6 hover:shadow-lg transition-all duration-300"
+            className="card p-3 xs:p-4 sm:p-5 lg:p-6 hover:shadow-lg transition-all duration-300"
           >
             {/* Card Header */}
-            <div className="mb-4 pb-3 border-b border-gray-200 dark:border-gray-700">
-              <div className="flex items-center space-x-2 mb-2">
-                <MapPin className="h-5 w-5 text-blue-600 dark:text-blue-400 flex-shrink-0" />
-                <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
+            <div className="mb-3 sm:mb-4 pb-2 sm:pb-3 border-b border-gray-200 dark:border-gray-700">
+              <div className="flex items-center space-x-2 mb-1.5 sm:mb-2">
+                <MapPin className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+                <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-gray-100 truncate">
                   Room {roomGroup.roomNumber}
                 </h3>
               </div>
               <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
-                <Calendar className="h-4 w-4" />
-                <span className="text-sm font-medium">{roomGroup.day}</span>
+                <Calendar className="h-3.5 w-3.5 sm:h-4 sm:w-4 flex-shrink-0" />
+                <span className="text-xs sm:text-sm font-medium">
+                  {roomGroup.day}
+                </span>
               </div>
             </div>
 
@@ -305,21 +307,22 @@ const RoomList = ({ rooms = [], showActions = false, onRoomUpdate }) => {
               {roomGroup.slots.map((slot, slotIndex) => (
                 <div
                   key={slot._id}
-                  className={`flex items-center justify-between p-3 rounded-lg border ${
+                  className={`flex flex-col xs:flex-row items-start xs:items-center justify-between p-2.5 xs:p-3 rounded-lg border gap-2 xs:gap-0 ${
                     slot.status === "Vacant"
                       ? "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800"
                       : "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800"
                   }`}
                 >
-                  <div className="flex items-center space-x-2 flex-1">
-                    <Clock className="h-4 w-4 text-gray-600 dark:text-gray-400 flex-shrink-0" />
-                    <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                  <div className="flex items-center space-x-2 flex-1 min-w-0">
+                    <Clock className="h-3.5 w-3.5 xs:h-4 xs:w-4 text-gray-600 dark:text-gray-400 flex-shrink-0" />
+                    <span className="text-xs xs:text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
                       {slot.duration}
                     </span>
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center flex-wrap gap-1.5 xs:gap-2 w-full xs:w-auto">
+                    {/* Status Badge */}
                     <span
-                      className={`badge text-xs ${
+                      className={`badge text-[10px] xs:text-xs px-1.5 xs:px-2 py-0.5 ${
                         slot.status === "Vacant"
                           ? "badge-success"
                           : "badge-danger"
@@ -327,8 +330,14 @@ const RoomList = ({ rooms = [], showActions = false, onRoomUpdate }) => {
                     >
                       {slot.status}
                     </span>
+                    {/* Allocated Badge - Shows when slot is Occupied (has a class) */}
+                    {slot.status === "Occupied" && (
+                      <span className="inline-flex items-center px-1.5 xs:px-2 py-0.5 rounded-full text-[10px] xs:text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300 border border-purple-200 dark:border-purple-700 whitespace-nowrap">
+                        <span className="hidden xs:inline">📚 </span>Allocated
+                      </span>
+                    )}
                     {showActions && (
-                      <div className="flex items-center space-x-1">
+                      <div className="flex items-center space-x-1 ml-auto xs:ml-0">
                         <button
                           onClick={() => {
                             // Find the full room object for editing
@@ -337,23 +346,23 @@ const RoomList = ({ rooms = [], showActions = false, onRoomUpdate }) => {
                             );
                             if (fullRoom) handleEdit(fullRoom);
                           }}
-                          className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
+                          className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors touch-manipulation"
                           disabled={
                             loading || (editingId && editingId !== slot._id)
                           }
                         >
                           {loading && editingId === slot._id ? (
-                            <Loader2 className="h-3 w-3 text-gray-600 dark:text-gray-400 animate-spin" />
+                            <Loader2 className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-gray-600 dark:text-gray-400 animate-spin" />
                           ) : (
-                            <Edit className="h-3 w-3 text-gray-600 dark:text-gray-400" />
+                            <Edit className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-gray-600 dark:text-gray-400" />
                           )}
                         </button>
                         <button
                           onClick={() => handleDelete(slot._id)}
-                          className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
+                          className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors touch-manipulation"
                           disabled={loading}
                         >
-                          <Trash2 className="h-3 w-3 text-red-600 dark:text-red-400" />
+                          <Trash2 className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-red-600 dark:text-red-400" />
                         </button>
                       </div>
                     )}
@@ -364,13 +373,13 @@ const RoomList = ({ rooms = [], showActions = false, onRoomUpdate }) => {
 
             {/* Edit Form - Show if any slot in this group is being edited */}
             {roomGroup.slots.some((slot) => editingId === slot._id) && (
-              <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+              <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-200 dark:border-gray-700">
+                <h4 className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 sm:mb-3">
                   Edit Slot
                 </h4>
-                <div className="space-y-3">
+                <div className="space-y-2 sm:space-y-3">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Room Number
                     </label>
                     <input
@@ -379,12 +388,12 @@ const RoomList = ({ rooms = [], showActions = false, onRoomUpdate }) => {
                       onChange={(e) =>
                         setEditData({ ...editData, roomNumber: e.target.value })
                       }
-                      className="input-field mt-1"
+                      className="input-field text-sm w-full"
                       placeholder="Room number"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Duration
                     </label>
                     <select
@@ -392,7 +401,7 @@ const RoomList = ({ rooms = [], showActions = false, onRoomUpdate }) => {
                       onChange={(e) =>
                         setEditData({ ...editData, duration: e.target.value })
                       }
-                      className="input-field mt-1"
+                      className="input-field text-sm w-full"
                       required
                     >
                       <option value="">Select duration</option>
@@ -405,7 +414,7 @@ const RoomList = ({ rooms = [], showActions = false, onRoomUpdate }) => {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Day
                     </label>
                     <select
@@ -413,7 +422,7 @@ const RoomList = ({ rooms = [], showActions = false, onRoomUpdate }) => {
                       onChange={(e) =>
                         setEditData({ ...editData, day: e.target.value })
                       }
-                      className="input-field mt-1"
+                      className="input-field text-sm w-full"
                     >
                       {[
                         "Monday",
@@ -431,7 +440,7 @@ const RoomList = ({ rooms = [], showActions = false, onRoomUpdate }) => {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Status
                     </label>
                     <select
@@ -439,23 +448,23 @@ const RoomList = ({ rooms = [], showActions = false, onRoomUpdate }) => {
                       onChange={(e) =>
                         setEditData({ ...editData, status: e.target.value })
                       }
-                      className="input-field mt-1"
+                      className="input-field text-sm w-full"
                     >
                       <option value="Vacant">Vacant</option>
                       <option value="Occupied">Occupied</option>
                     </select>
                   </div>
-                  <div className="flex space-x-2 pt-2">
+                  <div className="flex flex-col xs:flex-row space-y-2 xs:space-y-0 xs:space-x-2 pt-2">
                     <button
                       onClick={() => handleSave(editingId)}
                       disabled={loading}
-                      className="flex-1 btn-primary flex items-center justify-center text-sm py-2"
+                      className="flex-1 btn-primary flex items-center justify-center text-xs sm:text-sm py-2 sm:py-2.5 touch-manipulation"
                     >
                       {loading ? (
                         <Loader2 className="h-4 w-4 animate-spin" />
                       ) : (
                         <>
-                          <Check className="h-4 w-4 mr-1" />
+                          <Check className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1" />
                           Save
                         </>
                       )}
@@ -463,9 +472,9 @@ const RoomList = ({ rooms = [], showActions = false, onRoomUpdate }) => {
                     <button
                       onClick={handleCancel}
                       disabled={loading}
-                      className="flex-1 btn-secondary flex items-center justify-center text-sm py-2"
+                      className="flex-1 btn-secondary flex items-center justify-center text-xs sm:text-sm py-2 sm:py-2.5 touch-manipulation"
                     >
-                      <X className="h-4 w-4 mr-1" />
+                      <X className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1" />
                       Cancel
                     </button>
                   </div>
@@ -478,23 +487,23 @@ const RoomList = ({ rooms = [], showActions = false, onRoomUpdate }) => {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex flex-col sm:flex-row items-center justify-between mt-6 sm:mt-8 space-y-3 sm:space-y-0">
-          <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 text-center sm:text-left">
+        <div className="flex flex-col sm:flex-row items-center justify-between mt-4 sm:mt-6 lg:mt-8 gap-3 sm:gap-4">
+          <div className="text-[10px] xs:text-xs sm:text-sm text-gray-600 dark:text-gray-400 text-center sm:text-left order-2 sm:order-1">
             Showing {startIndex + 1} to{" "}
             {Math.min(endIndex, groupedRoomsArray.length)} of{" "}
             {groupedRoomsArray.length} room groups
           </div>
-          <div className="flex items-center space-x-1 sm:space-x-2">
+          <div className="flex items-center space-x-1 sm:space-x-2 order-1 sm:order-2">
             <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
-              className="px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700"
+              className="px-2 xs:px-2.5 sm:px-3 py-1.5 sm:py-2 text-[10px] xs:text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700 transition-colors touch-manipulation"
             >
-              <span className="hidden sm:inline">Previous</span>
-              <span className="sm:hidden">Prev</span>
+              <span className="hidden xs:inline">Prev</span>
+              <span className="inline xs:hidden">‹</span>
             </button>
 
-            <div className="flex space-x-1 max-w-[200px] overflow-x-auto scrollbar-hide">
+            <div className="flex space-x-1 overflow-x-auto scrollbar-hide max-w-[140px] xs:max-w-[180px] sm:max-w-[240px]">
               {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
                 let page;
                 if (totalPages <= 5) {
@@ -510,9 +519,9 @@ const RoomList = ({ rooms = [], showActions = false, onRoomUpdate }) => {
                   <button
                     key={page}
                     onClick={() => handlePageChange(page)}
-                    className={`px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium rounded-lg flex-shrink-0 ${
+                    className={`min-w-[28px] xs:min-w-[32px] sm:min-w-[36px] px-2 xs:px-2.5 sm:px-3 py-1.5 sm:py-2 text-[10px] xs:text-xs sm:text-sm font-medium rounded-lg flex-shrink-0 transition-colors touch-manipulation ${
                       currentPage === page
-                        ? "bg-blue-600 text-white"
+                        ? "bg-blue-600 text-white hover:bg-blue-700"
                         : "text-gray-500 bg-white border border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700"
                     }`}
                   >
@@ -525,10 +534,10 @@ const RoomList = ({ rooms = [], showActions = false, onRoomUpdate }) => {
             <button
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
-              className="px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700"
+              className="px-2 xs:px-2.5 sm:px-3 py-1.5 sm:py-2 text-[10px] xs:text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700 transition-colors touch-manipulation"
             >
-              <span className="hidden sm:inline">Next</span>
-              <span className="sm:hidden">Next</span>
+              <span className="hidden xs:inline">Next</span>
+              <span className="inline xs:hidden">›</span>
             </button>
           </div>
         </div>

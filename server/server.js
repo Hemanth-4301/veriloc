@@ -22,7 +22,6 @@ app.use(express.json());
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/rooms", require("./routes/rooms"));
 app.use("/api/admin", require("./routes/activity"));
-app.use("/api/attendance", require("./routes/attendance"));
 
 // Health check endpoint
 app.get("/api/health", (req, res) => {

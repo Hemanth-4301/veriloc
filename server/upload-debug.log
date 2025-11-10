@@ -345,3 +345,191 @@ Error: Failed to parse room data from file: Gemini API error: [GoogleGenerativeA
 [2025-11-04T06:26:23.265Z] ================================================================================
 [2025-11-04T06:26:23.267Z] 🔧 Initializing GeminiService...
 [2025-11-04T06:26:23.268Z] ✅ GeminiService initialized with model: gemini-2.5-pro
+[2025-11-10T17:26:23.115Z] ================================================================================
+[2025-11-10T17:26:23.118Z] Logger initialized at 2025-11-10T17:26:23.118Z
+[2025-11-10T17:26:23.119Z] ================================================================================
+[2025-11-10T17:26:23.121Z] 🔧 Initializing GeminiService...
+[2025-11-10T17:26:23.122Z] ✅ GeminiService initialized with model: gemini-2.5-pro
+--------------------------------------------------------------------------------
+[2025-11-10T17:36:16.998Z] � UPLOAD ROUTE CALLED
+[2025-11-10T17:36:17.003Z] User: Hem-4301
+[2025-11-10T17:36:17.011Z] 📤 File received:
+{
+  "filename": "WhatsApp Image 2025-10-29 at 20.59.21_14383f98.jpg",
+  "mimetype": "image/jpeg",
+  "size": 121187
+}
+[2025-11-10T17:36:17.030Z] ✅ File type validated
+[2025-11-10T17:36:17.036Z] 🤖 Calling geminiService.parseRoomDataFromFile...
+--------------------------------------------------------------------------------
+[2025-11-10T17:36:17.051Z] � parseRoomDataFromFile CALLED
+[2025-11-10T17:36:17.055Z] 📄 File size: 121187 bytes
+[2025-11-10T17:36:17.058Z] 📄 MIME type: image/jpeg
+[2025-11-10T17:36:17.068Z] 🔄 Converting buffer to base64...
+[2025-11-10T17:36:17.088Z] ✅ Base64 conversion complete: 161584 characters
+[2025-11-10T17:36:17.090Z] 🤖 Sending request to Gemini API...
+[2025-11-10T17:36:23.057Z] ❌ ERROR: ❌ Gemini API request failed:
+[GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent: [503 Service Unavailable] The model is overloaded. Please try again later.
+[2025-11-10T17:36:23.065Z] ❌ ERROR: ❌ Error during file parsing:
+[2025-11-10T17:36:23.072Z] ❌ ERROR:    Error name: Error
+[2025-11-10T17:36:23.079Z] ❌ ERROR:    Error message: Gemini API error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent: [503 Service Unavailable] The model is overloaded. Please try again later.
+[2025-11-10T17:36:23.084Z] ❌ ERROR:    Stack: Error: Gemini API error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent: [503 Service Unavailable] The model is overloaded. Please try again later.
+    at GeminiService.parseRoomDataFromFile (C:\Users\INTEL\Desktop\my_projects\veriloc\server\services\geminiService.js:121:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async C:\Users\INTEL\Desktop\my_projects\veriloc\server\routes\rooms.js:823:21
+--------------------------------------------------------------------------------
+[2025-11-10T17:36:23.104Z] ❌ ERROR: ❌ Gemini parsing failed:
+Failed to parse room data from file: Gemini API error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent: [503 Service Unavailable] The model is overloaded. Please try again later.
+[2025-11-10T17:36:23.118Z] ❌ ERROR: Full error:
+Error: Failed to parse room data from file: Gemini API error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent: [503 Service Unavailable] The model is overloaded. Please try again later.
+    at GeminiService.parseRoomDataFromFile (C:\Users\INTEL\Desktop\my_projects\veriloc\server\services\geminiService.js:308:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async C:\Users\INTEL\Desktop\my_projects\veriloc\server\routes\rooms.js:823:21--------------------------------------------------------------------------------
+[2025-11-10T17:36:40.028Z] � UPLOAD ROUTE CALLED
+[2025-11-10T17:36:40.029Z] User: Hem-4301
+[2025-11-10T17:36:40.030Z] 📤 File received:
+{
+  "filename": "WhatsApp Image 2025-10-29 at 20.59.21_14383f98.jpg",
+  "mimetype": "image/jpeg",
+  "size": 121187
+}
+[2025-11-10T17:36:40.032Z] ✅ File type validated
+[2025-11-10T17:36:40.033Z] 🤖 Calling geminiService.parseRoomDataFromFile...
+--------------------------------------------------------------------------------
+[2025-11-10T17:36:40.036Z] � parseRoomDataFromFile CALLED
+[2025-11-10T17:36:40.037Z] 📄 File size: 121187 bytes
+[2025-11-10T17:36:40.039Z] 📄 MIME type: image/jpeg
+[2025-11-10T17:36:40.041Z] 🔄 Converting buffer to base64...
+[2025-11-10T17:36:40.043Z] ✅ Base64 conversion complete: 161584 characters
+[2025-11-10T17:36:40.044Z] 🤖 Sending request to Gemini API...
+[2025-11-10T17:36:51.838Z] ❌ ERROR: ❌ Gemini API request failed:
+[GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent: [503 Service Unavailable] The model is overloaded. Please try again later.
+[2025-11-10T17:36:51.845Z] ❌ ERROR: ❌ Error during file parsing:
+[2025-11-10T17:36:51.850Z] ❌ ERROR:    Error name: Error
+[2025-11-10T17:36:51.857Z] ❌ ERROR:    Error message: Gemini API error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent: [503 Service Unavailable] The model is overloaded. Please try again later.
+[2025-11-10T17:36:51.860Z] ❌ ERROR:    Stack: Error: Gemini API error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent: [503 Service Unavailable] The model is overloaded. Please try again later.
+    at GeminiService.parseRoomDataFromFile (C:\Users\INTEL\Desktop\my_projects\veriloc\server\services\geminiService.js:121:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async C:\Users\INTEL\Desktop\my_projects\veriloc\server\routes\rooms.js:823:21
+--------------------------------------------------------------------------------
+[2025-11-10T17:36:51.872Z] ❌ ERROR: ❌ Gemini parsing failed:
+Failed to parse room data from file: Gemini API error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent: [503 Service Unavailable] The model is overloaded. Please try again later.
+[2025-11-10T17:36:51.880Z] ❌ ERROR: Full error:
+Error: Failed to parse room data from file: Gemini API error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent: [503 Service Unavailable] The model is overloaded. Please try again later.
+    at GeminiService.parseRoomDataFromFile (C:\Users\INTEL\Desktop\my_projects\veriloc\server\services\geminiService.js:308:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async C:\Users\INTEL\Desktop\my_projects\veriloc\server\routes\rooms.js:823:21--------------------------------------------------------------------------------
+[2025-11-10T17:37:04.948Z] � UPLOAD ROUTE CALLED
+[2025-11-10T17:37:04.953Z] User: Hem-4301
+[2025-11-10T17:37:04.960Z] 📤 File received:
+{
+  "filename": "WhatsApp Image 2025-10-29 at 20.59.21_14383f98.jpg",
+  "mimetype": "image/jpeg",
+  "size": 121187
+}
+[2025-11-10T17:37:04.973Z] ✅ File type validated
+[2025-11-10T17:37:04.982Z] 🤖 Calling geminiService.parseRoomDataFromFile...
+--------------------------------------------------------------------------------
+[2025-11-10T17:37:05.001Z] � parseRoomDataFromFile CALLED
+[2025-11-10T17:37:05.008Z] 📄 File size: 121187 bytes
+[2025-11-10T17:37:05.011Z] 📄 MIME type: image/jpeg
+[2025-11-10T17:37:05.013Z] 🔄 Converting buffer to base64...
+[2025-11-10T17:37:05.017Z] ✅ Base64 conversion complete: 161584 characters
+[2025-11-10T17:37:05.022Z] 🤖 Sending request to Gemini API...
+[2025-11-10T17:37:14.767Z] ❌ ERROR: ❌ Gemini API request failed:
+[GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent: [503 Service Unavailable] The model is overloaded. Please try again later.
+[2025-11-10T17:37:14.772Z] ❌ ERROR: ❌ Error during file parsing:
+[2025-11-10T17:37:14.774Z] ❌ ERROR:    Error name: Error
+[2025-11-10T17:37:14.778Z] ❌ ERROR:    Error message: Gemini API error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent: [503 Service Unavailable] The model is overloaded. Please try again later.
+[2025-11-10T17:37:14.796Z] ❌ ERROR:    Stack: Error: Gemini API error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent: [503 Service Unavailable] The model is overloaded. Please try again later.
+    at GeminiService.parseRoomDataFromFile (C:\Users\INTEL\Desktop\my_projects\veriloc\server\services\geminiService.js:121:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async C:\Users\INTEL\Desktop\my_projects\veriloc\server\routes\rooms.js:823:21
+--------------------------------------------------------------------------------
+[2025-11-10T17:37:14.811Z] ❌ ERROR: ❌ Gemini parsing failed:
+Failed to parse room data from file: Gemini API error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent: [503 Service Unavailable] The model is overloaded. Please try again later.
+[2025-11-10T17:37:14.816Z] ❌ ERROR: Full error:
+Error: Failed to parse room data from file: Gemini API error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent: [503 Service Unavailable] The model is overloaded. Please try again later.
+    at GeminiService.parseRoomDataFromFile (C:\Users\INTEL\Desktop\my_projects\veriloc\server\services\geminiService.js:308:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async C:\Users\INTEL\Desktop\my_projects\veriloc\server\routes\rooms.js:823:21--------------------------------------------------------------------------------
+[2025-11-10T17:38:28.244Z] � UPLOAD ROUTE CALLED
+[2025-11-10T17:38:28.248Z] User: Hem-4301
+[2025-11-10T17:38:28.250Z] 📤 File received:
+{
+  "filename": "WhatsApp Image 2025-10-29 at 20.59.21_14383f98.jpg",
+  "mimetype": "image/jpeg",
+  "size": 121187
+}
+[2025-11-10T17:38:28.261Z] ✅ File type validated
+[2025-11-10T17:38:28.267Z] 🤖 Calling geminiService.parseRoomDataFromFile...
+--------------------------------------------------------------------------------
+[2025-11-10T17:38:28.280Z] � parseRoomDataFromFile CALLED
+[2025-11-10T17:38:28.282Z] 📄 File size: 121187 bytes
+[2025-11-10T17:38:28.285Z] 📄 MIME type: image/jpeg
+[2025-11-10T17:38:28.287Z] 🔄 Converting buffer to base64...
+[2025-11-10T17:38:28.293Z] ✅ Base64 conversion complete: 161584 characters
+[2025-11-10T17:38:28.298Z] 🤖 Sending request to Gemini API...
+[2025-11-10T17:39:15.030Z] ================================================================================
+[2025-11-10T17:39:15.033Z] Logger initialized at 2025-11-10T17:39:15.033Z
+[2025-11-10T17:39:15.034Z] ================================================================================
+[2025-11-10T17:39:15.035Z] 🔧 Initializing GeminiService...
+[2025-11-10T17:39:15.036Z] ✅ GeminiService initialized with model: gemini-2.5-flash
+--------------------------------------------------------------------------------
+[2025-11-10T17:39:18.407Z] � UPLOAD ROUTE CALLED
+[2025-11-10T17:39:18.409Z] User: Hem-4301
+[2025-11-10T17:39:18.411Z] 📤 File received:
+{
+  "filename": "WhatsApp Image 2025-10-29 at 20.59.21_14383f98.jpg",
+  "mimetype": "image/jpeg",
+  "size": 121187
+}
+[2025-11-10T17:39:18.420Z] ✅ File type validated
+[2025-11-10T17:39:18.423Z] 🤖 Calling geminiService.parseRoomDataFromFile...
+--------------------------------------------------------------------------------
+[2025-11-10T17:39:18.441Z] � parseRoomDataFromFile CALLED
+[2025-11-10T17:39:18.447Z] 📄 File size: 121187 bytes
+[2025-11-10T17:39:18.449Z] 📄 MIME type: image/jpeg
+[2025-11-10T17:39:18.454Z] 🔄 Converting buffer to base64...
+[2025-11-10T17:39:18.457Z] ✅ Base64 conversion complete: 161584 characters
+[2025-11-10T17:39:18.459Z] 🤖 Sending request to Gemini API...
+[2025-11-10T17:39:54.565Z] ✅ Received response from Gemini API
+[2025-11-10T17:39:54.568Z] 📝 Response length: 1255 characters
+[2025-11-10T17:39:54.569Z] 📝 Response preview: ```json
+[
+  {
+    "roomNumber": "305",
+    "day": "Monday",
+    "duration": "10:00-11:00",
+    "status": "Occupied"
+  },
+  {
+    "roomNumber": "304",
+    "day": "Monday",
+    "duration": "11:30-12:30"...
+[2025-11-10T17:39:54.572Z] 🧹 Removed JSON markdown blocks
+[2025-11-10T17:39:54.577Z] 🔍 Parsing JSON response...
+[2025-11-10T17:39:54.579Z] ✅ Parsed 11 raw room entries
+[2025-11-10T17:39:54.584Z] 🔍 Starting validation of room entries...
+[2025-11-10T17:39:54.587Z]    ✅ Entry 1: 305 - Monday - 10:00-11:00
+[2025-11-10T17:39:54.589Z]    ✅ Entry 2: 304 - Monday - 11:30-12:30
+[2025-11-10T17:39:54.596Z]    ✅ Entry 3: CSLAB5 - Tuesday - 11:30-12:30
+[2025-11-10T17:39:54.598Z]    ✅ Entry 4: CSLAB5 - Tuesday - 12:30-1:30
+[2025-11-10T17:39:54.600Z]    ✅ Entry 5: 310 - Tuesday - 2:30-3:30
+[2025-11-10T17:39:54.602Z]    ✅ Entry 6: 310 - Tuesday - 3:30-4:30
+[2025-11-10T17:39:54.605Z]    ✅ Entry 7: 309 - Wednesday - 11:30-12:30
+[2025-11-10T17:39:54.608Z]    ✅ Entry 8: 309 - Wednesday - 12:30-1:30
+[2025-11-10T17:39:54.611Z]    ✅ Entry 9: 305 - Thursday - 9:00-10:00
+[2025-11-10T17:39:54.613Z]    ✅ Entry 10: CSLAB5 - Thursday - 11:30-12:30
+[2025-11-10T17:39:54.615Z]    ✅ Entry 11: CSLAB5 - Thursday - 12:30-1:30
+[2025-11-10T17:39:54.616Z] ✅ Validated 11 out of 11 entries
+[2025-11-10T17:39:54.618Z] 🎉 Successfully parsed 11 room entries from file
+[2025-11-10T17:39:54.619Z] 📋 Sample extracted rooms:
+[2025-11-10T17:39:54.620Z]    1. 305 | Monday | 10:00-11:00 | Occupied
+[2025-11-10T17:39:54.621Z]    2. 304 | Monday | 11:30-12:30 | Occupied
+[2025-11-10T17:39:54.622Z]    3. CSLAB5 | Tuesday | 11:30-12:30 | Occupied
+[2025-11-10T17:39:54.624Z]    ... and 8 more
+--------------------------------------------------------------------------------
+[2025-11-10T17:39:54.626Z] ✅ Gemini returned 11 rooms
+[2025-11-10T17:39:56.972Z] 💾 Processing complete: 11 successful, 0 failed
+--------------------------------------------------------------------------------

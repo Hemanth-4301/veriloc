@@ -14,11 +14,11 @@ class GeminiService {
     }
 
     this.genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    // Using gemini-2.5-pro for direct file processing
+    // Using gemini-2.5-flash for direct file processing
     this.model = this.genAI.getGenerativeModel({
-      model: "gemini-2.5-pro",
+      model: "gemini-2.5-flash",
     });
-    logger.log("✅ GeminiService initialized with model: gemini-2.5-pro");
+    logger.log("✅ GeminiService initialized with model: gemini-2.5-flash");
   }
 
   /**

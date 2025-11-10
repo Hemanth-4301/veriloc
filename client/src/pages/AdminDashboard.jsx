@@ -30,7 +30,6 @@ import RoomForm from "../components/RoomForm.jsx";
 import RoomList from "../components/RoomList.jsx";
 import RoomManagement from "../components/RoomManagement.jsx";
 import OccupancyGraph from "../components/OccupancyGraph.jsx";
-import FacultyAttendance from "../components/FacultyAttendance.jsx";
 import api from "../services/api.js";
 import toast from "react-hot-toast";
 
@@ -56,7 +55,6 @@ const AdminDashboard = () => {
     { id: "admins", label: "Admins", icon: Users, adminOnly: true },
     { id: "rooms", label: "Rooms", icon: MapPin },
     { id: "analytics", label: "Analytics", icon: BarChart3 },
-    { id: "attendance", label: "Attendance", icon: Clock },
     { id: "settings", label: "Settings", icon: Settings },
   ];
 
@@ -574,12 +572,6 @@ const AdminDashboard = () => {
                 </div>
               </div>
             </div>
-          </div>
-        );
-      case "attendance":
-        return (
-          <div className="w-full">
-            <FacultyAttendance />
           </div>
         );
       case "settings":
