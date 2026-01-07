@@ -1,0 +1,18 @@
+
+error : the esp32 module was not recognising...only power was on
+solution: Some USB cables are power-only (no data lines).
+          Use a data cable (one that can transfer files between phone and PC).
+
+error: “��������” symbols in the Serial Monitor
+solution: �� symbols in the Serial Monitor mean that the baud rate in the Serial Monitor doesn’t match the one in your ESP32 code.
+
+
+
+
+
+
+
+
+
+
+
